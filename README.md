@@ -1,5 +1,6 @@
 # UniMod+
 Orbital Summer 2022 - Apollo Level, Joint Project by Lew Xuan Ming and Joel Lo
+
 UniMod is a web platform created with the intention to bring module information at a greater level of convenience at all levels.
 
 ## Technologies used:
