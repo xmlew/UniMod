@@ -1,8 +1,8 @@
-let mongoURI = `mongodb://localhost:27017`
+//let mongoURI = `mongodb://localhost:27017`
 const express = require("express");
 const mongoose = require("mongoose");
-const { count } = require("./models/modules");
-const modules = require("./models/modules");
+//const help = require("./controllers/modules")
+const { modules } = require("./models/modules");
 const users = require("./models/users");
 let router = express.Router();
 //const Router = require("./routes")
@@ -13,16 +13,12 @@ app.use(express.json());
 const PORT = 3002;
 
 mongoose.Promise = global.Promise;
-//mongoose.set('useNewUrlParser', true);
-//mongoose.set('useFindAndModify', false);
-//mongoose.set('useCreateIndex', true)
 
 const connectToDB = async () => {
     try {
         await mongoose.connect('mongodb://127.0.0.1:27017/UniMod',
         {
             useNewUrlParser: true,
-            //useFindAndModify: false,
             useUnifiedTopology: true
         }).then(() => {
             console.log("MongoDB connected...")
@@ -55,14 +51,20 @@ const findModByCode = (moduleCode) => {
 }
 
 //checks if there is an existing user with the same username in the database. If there is, log that a user already exists.
-const registerUser = (name, pass) => {
+const registerUser = async (name, pass) => {
     let newUser = {
         username: name,
         password: pass
     };
+
+    const existingUser = await users.findOne({
+        username: { $regex: new RegExp('^' + username + '$', 'i')},
+    });
+
     if (users.find({username: name}).count() != 0) {
         console.log("User already exists");
         return
+
     } else {
         users.insertMany(newUser);
         console.log("new user added")
@@ -70,28 +72,34 @@ const registerUser = (name, pass) => {
 };
 
 app.get('/', function (req, res, next) {
-    res.send('UniMod API')
+    return res.send('UniMod API')
 });
 
-app.get('/modsearch/:code', (req, res) => {
-    modules.find({'Module Code': "HSA1000"}).then(result => {
-        console.log(result)
-            if (result.count == 0) {
-                res.send("Not found")
-            } else if (result[0]['UG'] == "x") {
-                res.send("Not applicable for undergraduates")
-            } else if (result[0]['UG'] == "-") {
-                res.send("Is oversubscribed")
-            } else if (int(result[0]['UG']) < 10) {
-                res.send("Is popular")
-            } else if (int(result[0]['UG']) < 25) {
-                res.send("Has vacancies")
-            } else {
-                res.send("Has more than enough vacancies")
-            }
-        });
+const subscriptionLevel = (subscription) => {
+    if (subscription == "-") {
+        return `The module is oversubscribed.`
+    } else if (Number((subscription)) < 10) {
+        return `The module is very popular.`
+    } else if (Number((subscription)) < 25) {
+        return `The module is moderately popular.`
+    } else if (Number((subscription)) < 50) {
+        return `The module is not very popular.`
+    } else {
+        return `The module is unpopular.`
     }
-);
+}
+
+const moduleSubs = async (req, res) => {
+    const modCode = req.params['code']
+    const subscription = await modules.findOne({
+        'Module Code': modCode
+    }).exec();
+    //const popularity = subscriptionLevel(subscription['UG']);
+    return res.status(200).send(subscriptionLevel(subscription['UG']));
+}
+
+app.get('/modsearch/:code', moduleSubs) 
+
 
 //router.post('/register', )
 //users.insertMany(user);
