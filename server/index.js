@@ -3,8 +3,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 //const help = require("./controllers/modules")
 const { modules } = require("./models/modules");
+const { moduleSearch } = require("./models/modsearch")
 const users = require("./models/users");
-let router = express.Router();
+
+const {moduleSubs, dataDisplay, getCourseStudentData, modPopularity} = require("./controllers/modules");
+
 //const Router = require("./routes")
 
 const app = express();
@@ -16,7 +19,8 @@ mongoose.Promise = global.Promise;
 
 const connectToDB = async () => {
     try {
-        await mongoose.connect('mongodb://127.0.0.1:27017/UniMod',
+        //await mongoose.connect('mongodb://127.0.0.1:27017/UniMod',
+        await mongoose.connect('mongodb+srv://dbUser:Hello12345@cluster0.upmwx.mongodb.net/UniMod',
         {
             useNewUrlParser: true,
             useUnifiedTopology: true
@@ -75,31 +79,12 @@ app.get('/', function (req, res, next) {
     return res.send('UniMod API')
 });
 
-const subscriptionLevel = (subscription) => {
-    if (subscription == "-") {
-        return `The module is oversubscribed.`
-    } else if (Number((subscription)) < 10) {
-        return `The module is very popular.`
-    } else if (Number((subscription)) < 25) {
-        return `The module is moderately popular.`
-    } else if (Number((subscription)) < 50) {
-        return `The module is not very popular.`
-    } else {
-        return `The module is unpopular.`
-    }
-}
-
-const moduleSubs = async (req, res) => {
-    const modCode = req.params['code']
-    const subscription = await modules.findOne({
-        'Module Code': modCode
-    }).exec();
-    //const popularity = subscriptionLevel(subscription['UG']);
-    return res.status(200).send(subscriptionLevel(subscription['UG']));
-}
-
-app.get('/modsearch/:code', moduleSubs) 
-
+//application searches
+app.get('/modsearch/:code', moduleSubs);
+app.get('/display/:code', dataDisplay);
+app.get('/courseData/:course', getCourseStudentData);
+app.get('/modtakers/:code', modPopularity);
+//app.get('/modrec/:code', moduleSearch)
 
 //router.post('/register', )
 //users.insertMany(user);
