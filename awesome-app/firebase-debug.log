@@ -1,0 +1,29 @@
+[debug] [2022-06-25T05:04:41.063Z] ----------------------------------------------------------------------
+[debug] [2022-06-25T05:04:41.066Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\mymy1\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2022-06-25T05:04:41.066Z] CLI Version:   11.1.0
+[debug] [2022-06-25T05:04:41.066Z] Platform:      win32
+[debug] [2022-06-25T05:04:41.066Z] Node Version:  v16.15.0
+[debug] [2022-06-25T05:04:41.067Z] Time:          Sat Jun 25 2022 13:04:41 GMT+0800 (Singapore Standard Time)
+[debug] [2022-06-25T05:04:41.067Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-06-25T05:04:41.127Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-06-25T05:04:41.128Z] > authorizing via signed-in user (joelloliangze@gmail.com)
+[debug] [2022-06-25T05:04:41.128Z] [iam] checking project unimod-9edea for permissions ["firebase.projects.get"]
+[debug] [2022-06-25T05:04:41.130Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/unimod-9edea:testIamPermissions [none]
+[debug] [2022-06-25T05:04:41.130Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/unimod-9edea:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2022-06-25T05:04:42.199Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/unimod-9edea:testIamPermissions 200
+[debug] [2022-06-25T05:04:42.199Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/unimod-9edea:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2022-06-25T05:04:42.202Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/unimod-9edea [none]
+[debug] [2022-06-25T05:04:42.559Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/unimod-9edea 200
+[debug] [2022-06-25T05:04:42.559Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/unimod-9edea {"projectId":"unimod-9edea","projectNumber":"922762974536","displayName":"UniMod","name":"projects/unimod-9edea","resources":{"hostingSite":"unimod-9edea"},"state":"ACTIVE"}
+[info] 
+[info] === Serving from 'C:\Users\mymy1\OneDrive\Documents\GitHub\UniMod\awesome-app'...
+[info] 
+[debug] [2022-06-25T05:04:42.562Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/unimod-9edea/sites 
+[debug] [2022-06-25T05:04:44.096Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/unimod-9edea/sites 200
+[debug] [2022-06-25T05:04:44.096Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/unimod-9edea/sites {"sites":[{"name":"projects/unimod-9edea/sites/unimod-9edea","defaultUrl":"https://unimod-9edea.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2022-06-25T05:04:44.096Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/unimod-9edea/webApps/-/config [none]
+[debug] [2022-06-25T05:04:44.957Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/unimod-9edea/webApps/-/config 200
+[debug] [2022-06-25T05:04:44.957Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/unimod-9edea/webApps/-/config {"projectId":"unimod-9edea","storageBucket":"unimod-9edea.appspot.com","apiKey":"AIzaSyDTIzeDQawgo4YkAynqXBqtIIEWx655ZYY","authDomain":"unimod-9edea.firebaseapp.com","messagingSenderId":"922762974536"}
+[info] i  hosting: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] +  hosting: Local server: http://localhost:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:5000\u001b[22m\u001b[24m"}}
