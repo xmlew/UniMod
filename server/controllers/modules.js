@@ -1,31 +1,43 @@
-const mods = require('../models/modules');
-const fetch = require('node-fetch')
+const { modules } = require("../models/modules");
+const { students }= require("../models/studentdata")
 
-//function to query module subscription level
-/*In index*/
-const moduleSubscriptions = app.get('/modsearch/:code', (req, res) => {
-    modules.find({'Module Code': 'code'}).then(result => {
-            if (result.count == 0) {
-                return res.send("Not found")
-            } else if (result[0]['UG'] == "x") {
-                return res.send("Not applicable for undergraduates")
-            } else if (result[0]['UG'] == "-") {
-                return res.send("Is oversubscribed")
-            } else if (int(result[0]['UG']) < 10) {
-                return res.send("Is popular")
-            } else if (int(result[0]['UG']) < 25) {
-                return res.send("Has vacancies")
-            } else {
-                return res.send("Has more than enough vacancies")
-            }
-        });
+const subscriptionLevel = (subscription) => {
+    if (subscription == "-") {
+        return `The module is oversubscribed.`
+    } else if (Number((subscription)) < 10) {
+        return `The module is very popular.`
+    } else if (Number((subscription)) < 25) {
+        return `The module is moderately popular.`
+    } else if (Number((subscription)) < 50) {
+        return `The module is not very popular.`
+    } else {
+        return `The module is unpopular.`
     }
-);
+}
+
+const moduleSubs = async (req, res) => {
+    const modCode = req.params['code']
+    const subscription = await modules.findOne({
+        'Module Code': modCode
+    }).exec();
+    if (!subscription) {
+        return res.status(400).send("No such module in database.")
+    }
+    return res.status(200).send(subscriptionLevel(subscription['UG']));
+}
 
 //function to query module 'popularity' levels
 /* Queries the database for occurences of the module for a particular year
    and returns the number of occurences and a popularity level.
 */
+const modulePopularity = async (req, res) => {
+    const code = req.body;
+    const query = await modules.find();//code in sem1 or sem2
+    const count = query.length();
+    return res.status(200).send({
+        message: `This module had ${count} students taking it.`
+    })
+}
 
 //function for data display in dashboard
 /* LINE 1: Module code
@@ -33,5 +45,87 @@ const moduleSubscriptions = app.get('/modsearch/:code', (req, res) => {
    LINE 3: Subscription level
    LINE 4: Modreg Recommendation based on line 3
 */
+const dataDisplay = async (req, res) => {
+    const code = req.params['code'];
+    const query = await modules.findOne({
+        "Module Code": code,
+    });
 
-//function for 
+    if (!query) {
+        return res.status(400).send(
+            `No such module`
+        )
+    };
+
+    const name = query['Module Title'];
+    const subscription = subscriptionLevel(query['UG']);
+    if (subscription == `The module is oversubscribed.` || subscription == `The module is very popular.`) {
+        return res.status(200).send(
+            `${code}: ${name}. ${subscription} Put as 1st or 2nd priority for Modreg`   
+        )
+    } else if (subscription == `The module is moderately popular.` || subscription == `The module is not very popular.`) {
+        return res.status(200).send(
+            `${code}: ${name}. ${subscription} Put as 3rd or 4th priority for Modreg`   
+        )
+    } else {
+        return res.status(200).send(
+            `${code}: ${name}.${subscription} Put as 20th priority also for Modreg also can`  
+        )
+    }
+}
+
+//function for popularity of Modules
+const modPopularity= async (req, res) => {
+    const code = req.params['code']
+    const query1 = await students.find({
+        'Sem1': {$regex: code},
+    })
+    const query2 = await students.find({
+        'Sem2': {$regex: code},
+    })
+    if (Object.keys(query1).length == 0 && Object.keys(query2).length == 0) {
+        return res.send(`0 students took this mod in Sem1/Sem2. Module is either not available for this AY or is outdated.`)
+    } else {
+        return res.send(`There are ${Object.keys(query1).length} students taking this module in Sem1, ${Object.keys(query2).length} in Sem2.`)
+    }
+}
+
+/* Queries through GE Mods and ensures they're g*/
+
+//function for student data
+/* for a particular course, shows the modules that were taken in year 1 sem1 and sem2*/
+const getCourseStudentData = async (req, res) => {
+    const course = req.params['course'].replaceAll("-", " ");
+    const results = await students.find({'Course': course},);
+    let sem1 = {}
+    let sem2 = {}
+    console.log(Object.keys(results[0]["Sem1"]));
+    for (i = 0; i < Object.keys(results).length; i++) {
+        for (module1 of results[i]["Sem1"].toString().replaceAll("[", "")
+                                                     .replaceAll("]", "")
+                                                     .replaceAll("'", "")
+                                                     .split(", ")) {
+            if (!(module1 in sem1)) {
+                sem1[module1] = 1;
+            } else {
+                sem1[module1] += 1;
+            }
+        }
+        
+        for (module2 of results[i]["Sem2"].toString().replaceAll("[", "")
+                                                      .replaceAll("]", "")
+                                                      .replaceAll("'", "")
+                                                      .split(", ")) {
+            if (!(module2 in sem2)) {
+                sem2[module2] = 1;
+            } else {
+                sem2[module2] += 1;
+            }
+        }
+    }
+    console.log(sem1)
+    console.log(sem2)
+    return res.send({message: `Sem1: ${sem1.toString()}, Sem2: ${sem2.toString()}`})
+}
+
+module.exports = {subscriptionLevel, moduleSubs, dataDisplay, getCourseStudentData, modPopularity};
