@@ -13,17 +13,17 @@ const navConfig = [
   },
   {
     title: 'courses',
-    path: '/dashboard/user',
+    path: '/dashboard/courses',
     icon: getIcon('eva:layers-fill'),
   },
   {
     title: 'discover',
-    path: '/dashboard/products',
+    path: '/dashboard/discover',
     icon: getIcon('eva:search-fill'),
   },
   {
     title: 'popular modules',
-    path: '/dashboard/blog',
+    path: '/dashboard/popularmodules',
     icon: getIcon('eva:file-text-fill'),
   },
   {
