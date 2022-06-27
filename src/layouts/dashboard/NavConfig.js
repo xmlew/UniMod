@@ -9,7 +9,7 @@ const navConfig = [
   {
     title: 'dashboard',
     path: '/dashboard/app',
-    icon: getIcon('eva:pie-chart-2-fill'),
+    icon: getIcon('eva:home-outline'),
   },
   {
     title: 'user',
