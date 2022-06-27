@@ -9,20 +9,20 @@ const navConfig = [
   {
     title: 'dashboard',
     path: '/dashboard/app',
-    icon: getIcon('eva:home-outline'),
+    icon: getIcon('eva:home-fill'),
   },
   {
-    title: 'user',
+    title: 'courses',
     path: '/dashboard/user',
-    icon: getIcon('eva:people-fill'),
+    icon: getIcon('eva:layers-fill'),
   },
   {
-    title: 'product',
+    title: 'discover',
     path: '/dashboard/products',
-    icon: getIcon('eva:shopping-bag-fill'),
+    icon: getIcon('eva:search-fill'),
   },
   {
-    title: 'blog',
+    title: 'popular modules',
     path: '/dashboard/blog',
     icon: getIcon('eva:file-text-fill'),
   },
