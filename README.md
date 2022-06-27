@@ -1,20 +1,40 @@
-# UniMod+
-Orbital Summer 2022 - Apollo Level, Joint Project by Lew Xuan Ming and Joel Lo
+## Minimal [(Free version)](https://minimal-kit-react.vercel.app/)
 
-UniMod is a web platform created with the intention to bring module information at a greater level of convenience at all levels.
+![license](https://img.shields.io/badge/license-MIT-blue.svg)
 
-## Technologies used:
-### Backend:
-MongoDB: Cross-platform Document Database management system with massive community support
+> Free React Admin Dashboard made with Material-UI components and React.
 
-NodeJS: Local Javascript runtime environment
+![preview](public/static/preview.jpg)
 
-Express.js: Used extensively as middleware and for web app development
+| [Minimal Free](https://minimal-kit-react.vercel.app/) | [Minimal](https://material-ui.com/store/items/minimal-dashboard/) |
+| ----------------------------------------------------- | :---------------------------------------------------------------- |
+| **7** Demo pages                                      | **42+** demo pages                                                |
+| -                                                     | ✓ Multi-language                                                  |
+| -                                                     | ✓ Dark/Light Mode 🌓                                              |
+| -                                                     | ✓ [More components](https://minimals.cc/components)               |
+| -                                                     | ✓ TypeScript version                                              |
+| -                                                     | ✓ Design files (Figma & Sketch)                                   |
 
-### Frontend:
+## Page demo
 
-Milestone 1 only:
-HTML & CSS: Default building blocks of web development
+- [Dashboard](https://minimal-kit-react.vercel.app/dashboard/app)
+- [Users](https://minimal-kit-react.vercel.app/dashboard/user)
+- [Product](https://minimal-kit-react.vercel.app/dashboard/products)
+- [Blog](https://minimal-kit-react.vercel.app/dashboard/blog)
+- [Login](https://minimal-kit-react.vercel.app/login)
+- [Register](https://minimal-kit-react.vercel.app/register)
+- [Not Found](https://minimal-kit-react.vercel.app/404)
 
-Milestone 2 onwards:
-React.js: Popular frontend framework with much community support.
+## Getting started
+
+- Recommended `node js 14.x` and `npm 6+`
+- Install dependencies: `npm install` or `yarn install`
+- Start the project: `npm run start` or `yarn start`
+
+## License
+
+Distributed under the MIT License. See [LICENSE](https://github.com/minimal-ui-kit/minimal.free/blob/main/LICENSE.md) for more information.
+
+## Contact us
+
+Email Us: support@minimals.cc
