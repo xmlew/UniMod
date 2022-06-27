@@ -9,21 +9,21 @@ const navConfig = [
   {
     title: 'dashboard',
     path: '/dashboard/app',
-    icon: getIcon('eva:pie-chart-2-fill'),
+    icon: getIcon('eva:home-fill'),
   },
   {
-    title: 'user',
-    path: '/dashboard/user',
-    icon: getIcon('eva:people-fill'),
+    title: 'courses',
+    path: '/dashboard/courses',
+    icon: getIcon('eva:layers-fill'),
   },
   {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: getIcon('eva:shopping-bag-fill'),
+    title: 'discover',
+    path: '/dashboard/discover',
+    icon: getIcon('eva:search-fill'),
   },
   {
-    title: 'blog',
-    path: '/dashboard/blog',
+    title: 'popular modules',
+    path: '/dashboard/popularmodules',
     icon: getIcon('eva:file-text-fill'),
   },
   {
