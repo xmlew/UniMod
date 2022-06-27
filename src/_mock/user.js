@@ -6,21 +6,22 @@ import { sample } from 'lodash';
 const users = [...Array(24)].map((_, index) => ({
   id: faker.datatype.uuid(),
   avatarUrl: `/static/mock-images/avatars/avatar_${index + 1}.jpg`,
-  name: faker.name.findName(),
-  company: faker.company.companyName(),
+  courseCode: sample([
+    'CS1010S',
+    'CS1101',
+    'CS1010',
+    'CS1010E',
+    'CS2030',
+    'CS2030C',
+    'CS2040',
+    'CS2040C',
+    'CS3233'
+  ]),
+  courseName: sample(['coursename']),
   isVerified: faker.datatype.boolean(),
-  status: sample(['active', 'banned']),
-  role: sample([
-    'Leader',
-    'Hr Manager',
-    'UI Designer',
-    'UX Designer',
-    'UI/UX Designer',
-    'Project Manager',
-    'Backend Developer',
-    'Full Stack Designer',
-    'Front End Developer',
-    'Full Stack Developer',
+  status: sample(['active']),
+  faculty: sample([
+    'SOC'
   ]),
 }));
 
