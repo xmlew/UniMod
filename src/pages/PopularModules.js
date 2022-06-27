@@ -27,7 +27,7 @@ export default function Blog() {
             Popular Modules
           </Typography>
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Post
+            New Module
           </Button>
         </Stack>
 
