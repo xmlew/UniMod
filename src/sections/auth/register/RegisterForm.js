@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 // material
-import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
+import { Stack, TextField, IconButton, InputAdornment, Box, InputLabel, MenuItem, FormControl, Select} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
@@ -20,7 +20,14 @@ export default function RegisterForm() {
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
+    course: Yup.string().required('Course is required'),
   });
+
+  const [course, setCourse] = useState('');
+  const handleChange = (event) => {
+    setCourse(event.target.value);
+  };
+
 
   const formik = useFormik({
     initialValues: {
@@ -28,6 +35,7 @@ export default function RegisterForm() {
       lastName: '',
       email: '',
       password: '',
+      course:'',
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
@@ -87,6 +95,23 @@ export default function RegisterForm() {
             error={Boolean(touched.password && errors.password)}
             helperText={touched.password && errors.password}
           />
+
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Course</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={course}
+                label="Course"
+                onChange={handleChange}
+              >
+                <MenuItem value={10}>Computer Science</MenuItem>
+                <MenuItem value={20}>Business Analytics</MenuItem>
+                <MenuItem value={30}>Infomation Systems</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
 
           <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
             Register
