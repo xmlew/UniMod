@@ -50,13 +50,6 @@ const dataDisplay = async (req, res) => {
     const query = await modules.findOne({
         "Module Code": code,
     });
-
-    if (!query) {
-        return res.status(400).send(
-            `No such module`
-        )
-    };
-
     const name = query['Module Title'];
     const subscription = subscriptionLevel(query['UG']);
     if (subscription == `The module is oversubscribed.` || subscription == `The module is very popular.`) {
@@ -83,11 +76,7 @@ const modPopularity= async (req, res) => {
     const query2 = await students.find({
         'Sem2': {$regex: code},
     })
-    if (Object.keys(query1).length == 0 && Object.keys(query2).length == 0) {
-        return res.send(`0 students took this mod in Sem1/Sem2. Module is either not available for this AY or is outdated.`)
-    } else {
-        return res.send(`There are ${Object.keys(query1).length} students taking this module in Sem1, ${Object.keys(query2).length} in Sem2.`)
-    }
+    res.send(`There are ${Object.keys(query1).length} students taking this module in Sem1, ${Object.keys(query2).length} in Sem2.`)
 }
 
 /* Queries through GE Mods and ensures they're g*/

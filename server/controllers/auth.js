@@ -1,4 +1,5 @@
 const user = require('../models/users');
+const jwt = require('jsonwebtoken');
 // user registration, login
 // Primary purpose of login feature is to save module data. Difficult to use cookies so currently trying this out
 const loginUser = async (req, res) => {
