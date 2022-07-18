@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 // material
-import { Stack, TextField, IconButton, InputAdornment, Box, InputLabel, MenuItem, FormControl, Select} from '@mui/material';
+import { Stack, TextField, IconButton, InputAdornment, MenuItem} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
@@ -14,20 +14,41 @@ export default function RegisterForm() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [course, setCourse] = useState("CS");
+  const handleChange = (event) => {
+    setCourse(event.target.value);
+  };
+
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
-    course: Yup.string().required('Course is required'),
   });
 
-  const [course, setCourse] = useState('');
-  const handleChange = (event) => {
-    setCourse(event.target.value);
-  };
-
+  const courses = [
+    {
+      value: 'CS',
+      label: 'Computer Science',
+    },
+    {
+      value: 'IS',
+      label: 'Infomation Systems',
+    },
+    {
+      value: 'CEG',
+      label: 'Computer Engineering',
+    },
+    {
+      value: 'BZA',
+      label: 'Business Analytics',
+    },
+    {
+      value: 'ISC',
+      label: 'Infomation Security',
+    },
+  ];
 
   const formik = useFormik({
     initialValues: {
@@ -96,22 +117,21 @@ export default function RegisterForm() {
             helperText={touched.password && errors.password}
           />
 
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Course</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={course}
-                label="Course"
-                onChange={handleChange}
-              >
-                <MenuItem value={10}>Computer Science</MenuItem>
-                <MenuItem value={20}>Business Analytics</MenuItem>
-                <MenuItem value={30}>Infomation Systems</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+          <TextField
+            select
+            label="Course"
+            value={course}
+            onChange={handleChange}
+            helperText="Please select your course"
+          >
+            {courses.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+            error={Boolean(touched.course && errors.course)}
+            helperText={touched.course && errors.course}
+          </TextField>
 
           <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
             Register
