@@ -12,7 +12,7 @@ const users = require('./models/users');
 const app = express();
 app.use(express.json());
 app.use(cors());
-const PORT = 4000;
+const PORT = 4001;
 
 mongoose.Promise = global.Promise;
 const connectToDB = async () => {
@@ -38,10 +38,10 @@ app.get('/', function (req, res) {
 });
 
 //application searches
-app.get('/modsearch/:code', moduleSubs);
-app.get('/display/:code', dataDisplay);
-app.get('/courseData/:course', getCourseStudentData);
-app.get('/modtakers/:code', modPopularity);
+app.get('/modsearch/:code', cors(), moduleSubs);
+app.get('/display/:code', cors(), dataDisplay);
+app.get('/courseData/:course', cors(),getCourseStudentData);
+app.get('/modtakers/:code', cors(), modPopularity);
 
 //login
 let refreshTokens = []
@@ -49,7 +49,7 @@ let refreshTokens = []
 const ACCESS_TOKEN_SECRET = 'ed8b8ef103069e067c0970af7e1646eeb91700c4da9a6f5476b4a47ab6bd1082c1c39f51d664e165baa15004387c0dc8a6958dc85f09572cde5441bbacb07cb7';
 const REFRESH_TOKEN_SECRET = '7785422c96e77bc96c340389361ac04024e3f9dec829769eceb99049ed711fba950375280c3aa019947a02a528f47aeb92b913cf6dbc7cc595f54f80873dd6fd';
 
-app.post('/token', (req, res) => {
+app.post('/token', cors(), (req, res) => {
   const refreshToken = req.body.token
   if (refreshToken == null) return res.sendStatus(401)
   if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
@@ -60,13 +60,13 @@ app.post('/token', (req, res) => {
   })
 })
 
-app.delete('/logout', (req, res) => {
+app.delete('/logout', cors(),(req, res) => {
   refreshTokens = refreshTokens.filter(token => token !== req.body.token)
   console.log(refreshTokens);
   res.sendStatus(204)
 })
 
-app.post('/signup', async (req, res) => {
+app.post('/signup', cors(), async (req, res) => {
     const givenName = `${req.body.firstName} ${req.body.lastName}`;
     const username = req.body.username;
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
