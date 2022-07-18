@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 // material
-import { Stack, TextField, IconButton, InputAdornment, MenuItem} from '@mui/material';
+import { Stack, TextField, IconButton, InputAdornment, MenuItem } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
@@ -14,39 +14,39 @@ export default function RegisterForm() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [course, setCourse] = useState("CS");
+  const [course, setCourse] = useState("Computer Science");
   const handleChange = (event) => {
     setCourse(event.target.value);
   };
-
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
+    course: Yup.string(),
   });
 
   const courses = [
     {
-      value: 'CS',
+      value: 'Computer Science',
       label: 'Computer Science',
     },
     {
-      value: 'IS',
-      label: 'Infomation Systems',
+      value: 'Information Systems',
+      label: 'Information Systems',
     },
     {
-      value: 'CEG',
+      value: 'Computer Engineering',
       label: 'Computer Engineering',
     },
     {
-      value: 'BZA',
+      value: 'Business Analytics',
       label: 'Business Analytics',
     },
     {
-      value: 'ISC',
-      label: 'Infomation Security',
+      value: 'Information Security',
+      label: 'Information Security',
     },
   ];
 
@@ -56,11 +56,27 @@ export default function RegisterForm() {
       lastName: '',
       email: '',
       password: '',
-      course:'',
+      course: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/login', { replace: true });
+    onSubmit: (values) => {
+      console.log(values.course)
+      const data = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        username: values.email,
+        password: values.password,
+        course: values.course,
+      }
+      fetch("https://unimod2.herokuapp.com/signup", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data),
+      })
+      .then(res => res.text())
+      // .then(data => alert(data))
+      // .catch(alert("Failed"))
+      .then(navigate('/login', { replace: true }));
     },
   });
 
@@ -123,6 +139,7 @@ export default function RegisterForm() {
             value={course}
             onChange={handleChange}
             helperText="Please select your course"
+            {...getFieldProps('course')}
           >
             {courses.map((option) => (
               <MenuItem key={option.value} value={option.value}>
