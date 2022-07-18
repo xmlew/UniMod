@@ -31,7 +31,7 @@ const SORT_OPTIONS = [
 
 export default function Blog() {
   return (
-    <Page title="Dashboard: PopularModules">
+    <Page title="Popular Modules">
     <Container maxWidth="xl">
       <Typography variant="h4" sx={{ mb: 5 }}>
         Popular Modules

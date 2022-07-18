@@ -21,7 +21,7 @@ export default function EcommerceShop() {
   };
 
   return (
-    <Page title="Dashboard: Discover">
+    <Page title="Discover">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           Discover
