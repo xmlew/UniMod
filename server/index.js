@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 const {moduleSubs, dataDisplay, getCourseStudentData, modPopularity} = require("./controllers/modules");
 const users = require('./models/users');
@@ -10,6 +11,7 @@ const users = require('./models/users');
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 const PORT = 4000;
 
 mongoose.Promise = global.Promise;
