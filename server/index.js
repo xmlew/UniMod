@@ -45,7 +45,7 @@ app.get('/display/:code', cors(), dataDisplay);
 app.get('/courseData/:course', cors(),getCourseStudentData);
 app.get('/modtakers/:code', cors(), modPopularity);
 app.get('/geMods', cors(), geModPopularity);
-app.get('/user', cors(), showModules);
+app.post('/user', cors(), showModules);
 app.post('/addMod', cors(), addModule);
 app.post('/delMod', cors(), removeModule);
 
