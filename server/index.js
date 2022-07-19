@@ -45,9 +45,77 @@ app.get('/display/:code', cors(), dataDisplay);
 app.get('/courseData/:course', cors(),getCourseStudentData);
 app.get('/modtakers/:code', cors(), modPopularity);
 app.get('/geMods', cors(), geModPopularity);
-app.post('/user', cors(), showModules);
-app.post('/addMod', cors(), addModule);
-app.post('/delMod', cors(), removeModule);
+
+app.post('/user', cors(), async (req, res) => {
+  const token = req.body.token;
+  const stu = await tokens.findOne({'access': token}).exec();
+  const user = stu['username'];
+  const student = await users.findOne({'username': user},).exec();
+  let arr = [];
+  if (student['modules'].length != 0) {
+    arr = student['modules'].split(" ");
+  }
+  console.log(arr)
+  let moduleDescriptions = [];
+  for (i = 0; i < arr.length; i++) {
+    let help = await dataDisplay(arr[i]);
+    if (!help) {
+      moduleDescriptions.push(`${arr[i]}. No data for the module.`);
+    } else {
+      moduleDescriptions.push(help);
+    }
+  };
+
+  return res.status(200).send(JSON.stringify(moduleDescriptions));
+});
+
+app.post('/addMod', cors(), async (req, res) => {
+  const course = req.body.code;
+  const user = req.body.name;
+  const student = await users.findOne({'username': user},).exec();
+  const mod = await modules.findOne({'Module Code': course}).exec();
+  if (!mod) return res.status(401).send("Course doesn't exist");
+  
+  if (!student) return res.status(401);
+  const currentMods = student['modules'];
+  let currentModules = [];
+  if (currentMods.length != 0) {
+    currentModules = student['modules'].toString().split(" ");
+  }
+  if (currentModules.includes(course)) {
+    return res.status(401).send("Already has Course");
+  } else {
+    currentModules.push(course);
+    const newModules = currentModules.join(" ");
+    users.updateOne({'username': user}, {'modules': newModules}).exec();
+    return res.status(200).send("Module added");
+  }
+});
+
+app.post('/delMod', cors(), async (req, res) => {
+  const course = req.body.code;
+  const user = req.body.name;
+  const student = await users.findOne({'username': user},).exec();
+  const mod = await modules.findOne({'Module Code': course}).exec();
+  if (!mod) return res.status(401).send("Course doesn't exist");
+  
+  if (!student) return res.status(401).send("No such user");
+  const currentMods = student['modules'];
+  let currentModules = [];
+  if (currentMods.length != 0) {
+    currentModules = student['modules'].toString().split(" ");
+  }
+  if (!currentModules.includes(course)) {
+    return res.status(401).send("Does not have Course");
+  } else {
+    currentModules = currentModules.filter(mod => mod != course);
+    console.log(currentModules)
+    let courses = "";
+    if (currentModules) courses = currentModules.join(" ");
+    users.updateOne({'username': user}, {'modules': courses}).exec();
+    return res.status(200).send("Module Removed");
+  }
+});
 
 
 //login
