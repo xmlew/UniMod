@@ -77,15 +77,16 @@ const dataDisplay = async (code) => {
   const query = await modules.findOne({
       "Module Code": code,
   }).exec();
+  d = {}
   const name = query['Module Title'];
   const subscription = subscriptionLevel(query['UG']);
   if (subscription == `The module is oversubscribed.` || subscription == `The module is very popular.`) {
-      return  `${code}: ${name}. ${subscription} Put as 1st or 2nd priority for Modreg`   
+      d[code] = `${name}. ${subscription} Put as 1st or 2nd priority for Modreg`
   } else if (subscription == `The module is moderately popular.` || subscription == `The module is not very popular.`) {
-          `${code}: ${name}. ${subscription} Put as 3rd or 4th priority for Modreg`   
+      d[code] = `${name}. ${subscription} Put as 3rd or 4th priority for Modreg`
   } else {
-          `${code}: ${name}.${subscription} Put as 20th priority also for Modreg also can`  
-  }
+      d[code] = `${name}.${subscription} Put as 20th priority also for Modreg also can`
+  } return d;
 }
 
 const showModules = async (req, res) => {
@@ -103,7 +104,8 @@ const showModules = async (req, res) => {
   for (i = 0; i < arr.length; i++) {
     let help = await dataDisplay(arr[i]);
     if (!help) {
-      moduleDescriptions.push(`${arr[i]}. No data for the module.`);
+      let lol = arr[i];
+      moduleDescriptions.push({lol: `No data for the module.`});
     } else {
       moduleDescriptions.push(help);
     }
