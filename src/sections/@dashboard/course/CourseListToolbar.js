@@ -53,7 +53,7 @@ export default function CourseListToolbar({ numSelected, filterName, onFilterNam
         <SearchStyle
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search course..."
+          placeholder="Search courses..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />

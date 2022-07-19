@@ -65,6 +65,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+//  Set intial usestate
 export default function Course() {
   const [page, setPage] = useState(0);
 
@@ -84,6 +85,7 @@ export default function Course() {
     setOrderBy(property);
   };
 
+//  Logic behind selecting all clicks on dropbox
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = COURSELIST.map((n) => n.name);
@@ -93,6 +95,7 @@ export default function Course() {
     setSelected([]);
   };
 
+//  Logic Behind the clicks on dropbox
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -131,15 +134,18 @@ export default function Course() {
     <Page title="Course">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h4">
             Course
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Course
-          </Button>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:minus-fill" />}>
-            Delete Course
-          </Button>
+        </Stack>
+        
+        <Stack direction="row-reverse" alignItems="center" mb={2}>
+        <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+          New Course
+        </Button>
+        <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:minus-fill" />}>
+          Delete Course
+        </Button>
         </Stack>
 
         <Card>
