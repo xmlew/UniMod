@@ -44,28 +44,13 @@ GET http://localhost:4001/geMods
 
 ###
 
-GET http://localhost:4001/user
+GET http://localhost:4001/user/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoieG1sZWV3QGdtYWlsLmNvbSIsImlhdCI6MTY1ODE2Mzc0NCwiZXhwIjoxNjU4MTY3MzQ0fQ.IY-ok1q-wg-DuTO5RBs_7z9THfAWTXB6BvO0ns3gV7U
 Content-Type: application/json
-
-{
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoieG1sZWV3QGdtYWlsLmNvbSIsImlhdCI6MTY1ODE2Mzc0NCwiZXhwIjoxNjU4MTY3MzQ0fQ.IY-ok1q-wg-DuTO5RBs_7z9THfAWTXB6BvO0ns3gV7U"
-}
 
 ###
-POST http://localhost:4001/addMod
-Content-Type: application/json
-
-{
-    "name": "xmleew@gmail.com",
-    "code": "HSA1000"
-}
+GET  http://localhost:4001/addMod/HSA1000/xmleew@gmail.com
 
 ###
 
-POST http://localhost:4001/delMod
+GET http://localhost:4001/delMod/HSA1000/xmleew@gmail.com
 Content-Type: application/json
-
-{
-    "name": "xmleew@gmail.com",
-    "code": "CS1010S"
-}

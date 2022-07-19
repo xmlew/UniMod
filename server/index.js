@@ -13,7 +13,12 @@ const tokens = require('./models/tokens');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+const corsOptions ={
+  origin:'*', 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200,
+}
+app.use(cors(corsOptions));
 const PORT = 4001;
 
 mongoose.Promise = global.Promise;
@@ -40,82 +45,14 @@ app.get('/', function (req, res) {
 });
 
 //application searches
-app.get('/modsearch/:code', cors(), moduleSubs);
-app.get('/display/:code', cors(), dataDisplay);
-app.get('/courseData/:course', cors(),getCourseStudentData);
-app.get('/modtakers/:code', cors(), modPopularity);
-app.get('/geMods', cors(), geModPopularity);
-
-app.post('/user', cors(), async (req, res) => {
-  const token = req.body.token;
-  const stu = await tokens.findOne({'access': token}).exec();
-  const user = stu['username'];
-  const student = await users.findOne({'username': user},).exec();
-  let arr = [];
-  if (student['modules'].length != 0) {
-    arr = student['modules'].split(" ");
-  }
-  console.log(arr)
-  let moduleDescriptions = [];
-  for (i = 0; i < arr.length; i++) {
-    let help = await dataDisplay(arr[i]);
-    if (!help) {
-      moduleDescriptions.push(`${arr[i]}. No data for the module.`);
-    } else {
-      moduleDescriptions.push(help);
-    }
-  };
-
-  return res.status(200).send(JSON.stringify(moduleDescriptions));
-});
-
-app.post('/addMod', cors(), async (req, res) => {
-  const course = req.body.code;
-  const user = req.body.name;
-  const student = await users.findOne({'username': user},).exec();
-  const mod = await modules.findOne({'Module Code': course}).exec();
-  if (!mod) return res.status(401).send("Course doesn't exist");
-  
-  if (!student) return res.status(401);
-  const currentMods = student['modules'];
-  let currentModules = [];
-  if (currentMods.length != 0) {
-    currentModules = student['modules'].toString().split(" ");
-  }
-  if (currentModules.includes(course)) {
-    return res.status(401).send("Already has Course");
-  } else {
-    currentModules.push(course);
-    const newModules = currentModules.join(" ");
-    users.updateOne({'username': user}, {'modules': newModules}).exec();
-    return res.status(200).send("Module added");
-  }
-});
-
-app.post('/delMod', cors(), async (req, res) => {
-  const course = req.body.code;
-  const user = req.body.name;
-  const student = await users.findOne({'username': user},).exec();
-  const mod = await modules.findOne({'Module Code': course}).exec();
-  if (!mod) return res.status(401).send("Course doesn't exist");
-  
-  if (!student) return res.status(401).send("No such user");
-  const currentMods = student['modules'];
-  let currentModules = [];
-  if (currentMods.length != 0) {
-    currentModules = student['modules'].toString().split(" ");
-  }
-  if (!currentModules.includes(course)) {
-    return res.status(401).send("Does not have Course");
-  } else {
-    currentModules = currentModules.filter(mod => mod != course);
-    console.log(currentModules)
-    let courses = "";
-    if (currentModules) courses = currentModules.join(" ");
-    users.updateOne({'username': user}, {'modules': courses}).exec();
-    return res.status(200).send("Module Removed");
-  }
-});
+app.get('/modsearch/:code', cors(corsOptions), moduleSubs);
+app.get('/display/:code', cors(corsOptions), dataDisplay);
+app.get('/courseData/:course', cors(corsOptions),getCourseStudentData);
+app.get('/modtakers/:code', cors(corsOptions), modPopularity);
+app.get('/geMods', cors(corsOptions), geModPopularity);
+app.get('/user/:token', cors(corsOptions), showModules);
+app.get('/addMod/:code/:user', cors(corsOptions), addModule);
+app.get('/delMod/:code/:user', cors(corsOptions), removeModule)
 
 
 //login
@@ -124,7 +61,7 @@ let refreshTokens = []
 const ACCESS_TOKEN_SECRET = 'ed8b8ef103069e067c0970af7e1646eeb91700c4da9a6f5476b4a47ab6bd1082c1c39f51d664e165baa15004387c0dc8a6958dc85f09572cde5441bbacb07cb7';
 const REFRESH_TOKEN_SECRET = '7785422c96e77bc96c340389361ac04024e3f9dec829769eceb99049ed711fba950375280c3aa019947a02a528f47aeb92b913cf6dbc7cc595f54f80873dd6fd';
 
-app.post('/token', cors(), (req, res) => {
+app.post('/token', cors(corsOptions), (req, res) => {
   const refreshToken = req.body.token
   if (refreshToken == null) return res.sendStatus(401)
   if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
@@ -135,13 +72,13 @@ app.post('/token', cors(), (req, res) => {
   })
 })
 
-app.delete('/logout', cors(),(req, res) => {
+app.delete('/logout', cors(corsOptions),(req, res) => {
   refreshTokens = refreshTokens.filter(token => token !== req.body.token)
   console.log(refreshTokens);
   res.sendStatus(204)
 })
 
-app.post('/signup', cors(), async (req, res) => {
+app.post('/signup', cors(corsOptions), async (req, res) => {
     const givenName = `${req.body.firstName} ${req.body.lastName}`;
     const username = req.body.username;
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -155,7 +92,7 @@ app.post('/signup', cors(), async (req, res) => {
       res.sendStatus(200));
 })
 
-app.post('/login', async (req, res) => {
+app.post('/login', cors(corsOptions), async (req, res) => {
   // Authenticate User
 
   const username = req.body.username

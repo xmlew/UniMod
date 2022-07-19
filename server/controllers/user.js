@@ -2,28 +2,31 @@ const tokens = require('../models/tokens');
 const users = require('../models/users');
 const { subscriptionLevel } = require('./modules')
 const { modules } = require("../models/modules");
+const cors = require('cors');
+const { response } = require('express');
 
 //function to add module into user's data
 const addModule = async (req, res) => {
-    const course = req.body.code;
-    const user = req.body.name;
+    const course = req.params['code'];
+    const user = req.params['user'];
     const student = await users.findOne({'username': user},).exec();
+    if (!student) return res.sendStatus(401);
     const mod = await modules.findOne({'Module Code': course}).exec();
-    if (!mod) return res.status(401).send("Course doesn't exist");
+    if (!mod) return res.sendStatus(401);
     
-    if (!student) return res.status(401);
+    if (!student) return res.sendStatus(401);
     const currentMods = student['modules'];
     let currentModules = [];
     if (currentMods.length != 0) {
       currentModules = student['modules'].toString().split(" ");
     }
     if (currentModules.includes(course)) {
-      return res.status(401).send("Already has Course");
+      return res.sendStatus(401);
     } else {
       currentModules.push(course);
       const newModules = currentModules.join(" ");
       users.updateOne({'username': user}, {'modules': newModules}).exec();
-      return res.status(200).send("Module added");
+      return res.sendStatus(200);
     }
 }
 //LOGIC:
@@ -36,11 +39,11 @@ const addModule = async (req, res) => {
 
 //function to delete module from user's data
 const removeModule = async (req, res) => {
-  const course = req.body.code;
-  const user = req.body.name;
+  const course = req.params['code'];
+  const user = req.params['user'];
   const student = await users.findOne({'username': user},).exec();
   const mod = await modules.findOne({'Module Code': course}).exec();
-  if (!mod) return res.status(401).send("Course doesn't exist");
+  if (!mod) return res.sendStatus(401);
   
   if (!student) return res.status(401).send("No such user");
   const currentMods = student['modules'];
@@ -49,14 +52,14 @@ const removeModule = async (req, res) => {
     currentModules = student['modules'].toString().split(" ");
   }
   if (!currentModules.includes(course)) {
-    return res.status(401).send("Does not have Course");
+    return res.sendStatus(401);
   } else {
     currentModules = currentModules.filter(mod => mod != course);
     console.log(currentModules)
     let courses = "";
     if (currentModules) courses = currentModules.join(" ");
     users.updateOne({'username': user}, {'modules': courses}).exec();
-    return res.status(200).send("Module Removed");
+    return res.sendStatus(200);
   }
 }
 //LOGIC:
@@ -86,10 +89,11 @@ const dataDisplay = async (code) => {
 }
 
 const showModules = async (req, res) => {
-  const token = req.body.token;
+  const token = req.params['token'];
   const stu = await tokens.findOne({'access': token}).exec();
   const user = stu['username'];
   const student = await users.findOne({'username': user},).exec();
+  if (!student) return res.sendStatus(401);
   let arr = [];
   if (student['modules'].length != 0) {
     arr = student['modules'].split(" ");
@@ -105,7 +109,7 @@ const showModules = async (req, res) => {
     }
   };
 
-  return res.status(200).send(JSON.stringify(moduleDescriptions));
+  return res.json(moduleDescriptions);
 }
 
 module.exports = {addModule, removeModule, showModules};
