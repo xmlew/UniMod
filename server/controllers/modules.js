@@ -88,7 +88,6 @@ const getCourseStudentData = async (req, res) => {
     const results = await students.find({'Course': course},);
     let sem1 = {}
     let sem2 = {}
-    console.log(Object.keys(results[0]["Sem1"]));
     for (i = 0; i < Object.keys(results).length; i++) {
         for (module1 of results[i]["Sem1"].toString().replaceAll("[", "")
                                                      .replaceAll("]", "")
@@ -112,9 +111,39 @@ const getCourseStudentData = async (req, res) => {
             }
         }
     }
-    console.log(sem1)
-    console.log(sem2)
     return res.send({message: `Sem1: ${sem1.toString()}, Sem2: ${sem2.toString()}`})
 }
 
-module.exports = {subscriptionLevel, moduleSubs, dataDisplay, getCourseStudentData, modPopularity};
+const geModPopularity = async (req, res) => {
+    const results = await students.find();
+    const data = {}
+    for (i = 0; i < 5000; i++) {
+        console.log(results[i])
+        for (mod of results[i]['Sem1'].toString().replaceAll("[", "")
+                                                .replaceAll("]", "")
+                                                .replaceAll("'", "")
+                                                .split(", ")) {
+            if (!(mod in data) && mod.startsWith("GE")) {
+                data[mod] = 1;
+            } else if (mod.startsWith("GE")) {
+                data[mod] += 1;
+            }
+        }
+
+        for (mod of results[i]['Sem2'].toString().replaceAll("[", "")
+                                                .replaceAll("]", "")
+                                                .replaceAll("'", "")
+                                                .split(", ")) {
+            if (!(mod in data) && mod.startsWith("GE")) {
+                data[mod] = 1;
+            } else if ((mod.startsWith("GE"))) {
+                data[mod] += 1;
+            }
+        }
+    }
+    // for every item in results, if there is a GE module not in the current dictionary, add it into the dict.
+    // if there is, add a count to it.
+    return res.send(JSON.stringify(data))
+}
+
+module.exports = {subscriptionLevel, moduleSubs, dataDisplay, getCourseStudentData, modPopularity, geModPopularity};

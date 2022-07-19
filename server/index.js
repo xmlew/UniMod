@@ -4,8 +4,10 @@ const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
-const {moduleSubs, dataDisplay, getCourseStudentData, modPopularity} = require("./controllers/modules");
+const {moduleSubs, dataDisplay, getCourseStudentData, modPopularity, geModPopularity} = require("./controllers/modules");
+const {addModule, removeModule, showModules} = require("./controllers/user");
 const users = require('./models/users');
+const tokens = require('./models/tokens');
 
 //const Router = require("./routes")
 
@@ -34,7 +36,7 @@ connectToDB();
 //checks if there is an existing user with the same username in the database. If there is, log that a user already exists.
 
 app.get('/', function (req, res) {
-    return res.send('UniMod API')
+    return res.send('Welcome to UniMod API. API Endpoints can be found in Github repository')
 });
 
 //application searches
@@ -42,6 +44,11 @@ app.get('/modsearch/:code', cors(), moduleSubs);
 app.get('/display/:code', cors(), dataDisplay);
 app.get('/courseData/:course', cors(),getCourseStudentData);
 app.get('/modtakers/:code', cors(), modPopularity);
+app.get('/geMods', cors(), geModPopularity);
+app.get('/user', cors(), showModules);
+app.post('/addMod', cors(), addModule);
+app.post('/delMod', cors(), removeModule);
+
 
 //login
 let refreshTokens = []
@@ -87,7 +94,6 @@ app.post('/login', async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const existingUser = await users.findOne({'username': username}).exec();
   if (!existingUser) {
-    console.log("wth");
     return res.sendStatus(401);
   }
   bcrypt.compare(hashedPassword, existingUser['password'], (err, result) => {
@@ -95,11 +101,9 @@ app.post('/login', async (req, res) => {
   })
 
   const user = { name: username }
-
   const accessToken = generateAccessToken(user)
   const refreshToken = jwt.sign(user, REFRESH_TOKEN_SECRET)
-  refreshTokens.push(refreshToken)
-
+  tokens.insertMany([{'username': username, 'access': accessToken, 'refresh': refreshToken}]);
   return res.json({ accessToken: accessToken, refreshToken: refreshToken })
 })
 

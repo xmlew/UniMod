@@ -1,18 +1,29 @@
+const tokens = require('../models/tokens');
 const users = require('../models/users');
+const { subscriptionLevel } = require('./modules')
+const { modules } = require("../models/modules");
 
 //function to add module into user's data
 const addModule = async (req, res) => {
-    const course = req.params.code;
-    const user = req.user.name;
-    const student = await users.findOne({'username': user},);
+    const course = req.body.code;
+    const user = req.body.name;
+    const student = await users.findOne({'username': user},).exec();
+    const mod = await modules.findOne({'Module Code': course}).exec();
+    if (!mod) return res.status(401).send("Course doesn't exist");
     
-    if (student.length == 0) return res.status(401);
-    const currentModules = student['modules'].toString().split(" ");
-    if (course in currentModules) {
-      return res.status(401);
+    if (!student) return res.status(401);
+    const currentMods = student['modules'];
+    let currentModules = [];
+    if (currentMods.length != 0) {
+      currentModules = student['modules'].toString().split(" ");
+    }
+    if (currentModules.includes(course)) {
+      return res.status(401).send("Already has Course");
     } else {
-      const newModules = currentModules.push(course).join(' ');
-      users.updateOne({'username': user}, {'modules': newModules});
+      currentModules.push(course);
+      const newModules = currentModules.join(" ");
+      users.updateOne({'username': user}, {'modules': newModules}).exec();
+      return res.status(200).send("Module added");
     }
 }
 //LOGIC:
@@ -25,17 +36,27 @@ const addModule = async (req, res) => {
 
 //function to delete module from user's data
 const removeModule = async (req, res) => {
-  const course = req.params.code;
-  const user = req.user.name;
-  const student = await users.findOne({'username': user},);
+  const course = req.body.code;
+  const user = req.body.name;
+  const student = await users.findOne({'username': user},).exec();
+  const mod = await modules.findOne({'Module Code': course}).exec();
+  if (!mod) return res.status(401).send("Course doesn't exist");
   
-  if (student.length == 0) return res.status(401);
-  const currentModules = student['modules'].toString().split(" ");
-  if (!course in currentModules) {
-    return res.status(401);
+  if (!student) return res.status(401).send("No such user");
+  const currentMods = student['modules'];
+  let currentModules = [];
+  if (currentMods.length != 0) {
+    currentModules = student['modules'].toString().split(" ");
+  }
+  if (!currentModules.includes(course)) {
+    return res.status(401).send("Does not have Course");
   } else {
-    const newModules = currentModules.filter(mod => mod != course).join(' ');
-    users.updateOne({'username': user}, {'modules': newModules});
+    currentModules = currentModules.filter(mod => mod != course);
+    console.log(currentModules)
+    let courses = "";
+    if (currentModules) courses = currentModules.join(" ");
+    users.updateOne({'username': user}, {'modules': courses}).exec();
+    return res.status(200).send("Module Removed");
   }
 }
 //LOGIC:
@@ -52,7 +73,7 @@ const removeModule = async (req, res) => {
 const dataDisplay = async (code) => {
   const query = await modules.findOne({
       "Module Code": code,
-  });
+  }).exec();
   const name = query['Module Title'];
   const subscription = subscriptionLevel(query['UG']);
   if (subscription == `The module is oversubscribed.` || subscription == `The module is very popular.`) {
@@ -65,13 +86,23 @@ const dataDisplay = async (code) => {
 }
 
 const showModules = async (req, res) => {
-  const user = req.user.name;
-  const student = await users.findOne({'username': user},);
-  const modules = student['modules'].toString().split(" ");
+  const token = req.body.token;
+  const stu = await tokens.findOne({'access': token}).exec();
+  const user = stu['username'];
+  const student = await users.findOne({'username': user},).exec();
+  let arr = [];
+  if (student['modules'].length != 0) {
+    arr = student['modules'].split(" ");
+  }
+  console.log(arr)
   let moduleDescriptions = [];
-
-  for (i = 0; i < student.length; i++) {
-    moduleDescriptions.push(dataDisplay(modules[i]));
+  for (i = 0; i < arr.length; i++) {
+    let help = await dataDisplay(arr[i]);
+    if (!help) {
+      moduleDescriptions.push(`${arr[i]}. No data for the module.`);
+    } else {
+      moduleDescriptions.push(help);
+    }
   };
 
   return res.status(200).send(JSON.stringify(moduleDescriptions));
