@@ -14,7 +14,8 @@ export default function RegisterForm() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [course, setCourse] = useState("Computer Science");
+  
+  const [course, setCourse] = useState("CS");
   const handleChange = (event) => {
     setCourse(event.target.value);
   };
@@ -24,7 +25,7 @@ export default function RegisterForm() {
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
-    course: Yup.string(),
+    course: Yup.string().required('Course is required')
   });
 
   const courses = [
@@ -136,6 +137,7 @@ export default function RegisterForm() {
           <TextField
             select
             label="Course"
+            {...getFieldProps('course')}
             value={course}
             onChange={handleChange}
             helperText="Please select your course"

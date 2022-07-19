@@ -1,70 +1,53 @@
-import { Link as RouterLink } from 'react-router-dom';
-// material
-import { Grid, Button, Container, Stack, Typography } from '@mui/material';
+// @mui
+import { Grid, Container, Typography } from '@mui/material';
 // components
 import Page from '../components/Page';
-import Iconify from '../components/Iconify';
-import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
-// mock
-import POSTS from '../_mock/blog';
+// sections
 import {
-  AppTasks,
-  AppNewsUpdate,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
   AppWidgetSummary,
-  AppCurrentSubject,
-  AppConversionRates,
 } from '../sections/@dashboard/app';
 
 // ----------------------------------------------------------------------
 
-const SORT_OPTIONS = [
-  { value: 'latest', label: 'Latest' },
-  { value: 'popular', label: 'Popular' },
-  { value: 'oldest', label: 'Oldest' },
-];
+//  Array of Data
+const studentModules = [
+  {
+    title: "Over Subscribed",
+    total: "CS1010S"
+  },
+  {
+    title: "Equal Supply & Demand",
+    total: "CS1010E"
+  },
+  {
+    title: "Under Subscribed",
+    total: "CS1010"
+  },
+  {
+    title: "Over Subscribed",
+    total: "CS1101S"
+  }
+]
 
-// ----------------------------------------------------------------------
 
-export default function Blog() {
+
+export default function PopularModules() {
+
   return (
     <Page title="Popular Modules">
-    <Container maxWidth="xl">
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        Popular Modules
-      </Typography>
+      <Container maxWidth="xl">
+        <Typography variant="h4" sx={{ mb: 5 }}>
+          Popular Modules
+        </Typography>
+        <Grid container spacing={3}>
+        {studentModules.map((module, i) => (
+          <Grid key={i} item xs={12} sm={6} md={3}>
+            <AppWidgetSummary title={module.title} total={module.total} icon={'ant-design:android-filled'} />
+          </Grid>
+        ))}
+        </Grid>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} md={3}>
-          <AppWidgetSummary title="Over Subscribed" total="CS1010S" icon={'ant-design:android-filled'} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <AppWidgetSummary title="Over Subscribed" total="CS1010E" icon={'ant-design:android-filled'} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <AppWidgetSummary title="Over Subscribed" total="CS1010" icon={'ant-design:android-filled'} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <AppWidgetSummary title="Over Subscribed" total="CS1101" icon={'ant-design:android-filled'} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <AppWidgetSummary title="Over Subscribed" total="CS2030" icon={'ant-design:android-filled'} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <AppWidgetSummary title="Over Subscribed" total="CS2030C" icon={'ant-design:android-filled'} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <AppWidgetSummary title="Over Subscribed" total="CS2040" icon={'ant-design:android-filled'} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <AppWidgetSummary title="Over Subscribed" total="CS3233" icon={'ant-design:android-filled'} />
-        </Grid>
-      </Grid>
-
-    </Container>
-  </Page>
+      </Container>
+    </Page>
   );
 }
