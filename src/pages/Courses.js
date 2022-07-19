@@ -160,7 +160,7 @@ export default function Course() {
                 />
                 <TableBody>
                   {filteredCourses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, faculty, code, avatarUrl} = row;
+                    const { id, name, faculty, code} = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -175,14 +175,7 @@ export default function Course() {
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
+                        <TableCell align="left">{name}</TableCell>
                         <TableCell align="left">{code}</TableCell>
                         <TableCell align="left">{faculty}</TableCell>
 

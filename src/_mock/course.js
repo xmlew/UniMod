@@ -4,8 +4,7 @@ import { sample } from 'lodash';
 // ----------------------------------------------------------------------
 
 const courses = [...Array(25)].map((_, index) => ({
-  id: faker.datatype.uuid(),
-  avatarUrl: `/static/mock-images/avatars/avatar_${index + 1}.jpg`,
+  id: index,
   name: sample([
     "apple",
     "banana",
