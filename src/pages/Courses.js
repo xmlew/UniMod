@@ -6,7 +6,6 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
   Checkbox,
   TableRow,
@@ -178,10 +177,10 @@ export default function Course() {
                         <TableCell align="left">{name}</TableCell>
                         <TableCell align="left">{code}</TableCell>
                         <TableCell align="left">{faculty}</TableCell>
-
                         <TableCell align="right">
                           <CourseMoreMenu />
                         </TableCell>
+                        
                       </TableRow>
                     );
                   })}
