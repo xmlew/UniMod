@@ -78,15 +78,15 @@ app.post('/logout', cors(corsOptions),(req, res) => {
   res.sendStatus(204)
 })
 
-app.get('/signup/:fname/:lname/:user/:pass/:course', cors(corsOptions), async (req, res) => {
-    const givenName = `${req.params.fname} ${req.params.lname}`;
-    const username = req.params.user;
-    const hashedPassword = await bcrypt.hash(req.params.pass, 10);
-    const course = req.params.course;
+app.post('/signup', cors(corsOptions), async (req, res) => {
+    const givenName = `${req.body.firstName} ${req.body.lastName}`;
+    const username = req.body.user;
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const course = req.body.course;
 
     const verify = await users.findOne({'username': username}).exec();
     //users.updateOne({'username': username}, {'modules': 'CS1010S'}).exec();
-    if (verify) return res.sendStatus(401);
+    if (!verify) return res.sendStatus(401);
 
     users.insertMany([{'name': givenName, 'username': username, 'password': hashedPassword, 'course': course, 'modules': ""}]).then(
       res.sendStatus(200));

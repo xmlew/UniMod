@@ -141,9 +141,14 @@ const geModPopularity = async (req, res) => {
             }
         }
     }
+    let newData = [];
+    for (const [key, value] of Object.entries(data)) {
+        let newDict = {title: value, total: key};
+        newData.push(newDict)
+    }
     // for every item in results, if there is a GE module not in the current dictionary, add it into the dict.
     // if there is, add a count to it.
-    return res.send(JSON.stringify(data))
+    return res.send(JSON.stringify(newData))
 }
 
 module.exports = {subscriptionLevel, moduleSubs, dataDisplay, getCourseStudentData, modPopularity, geModPopularity};

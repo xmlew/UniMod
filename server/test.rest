@@ -2,13 +2,8 @@ GET https://unimod2.herokuapp.com/modsearch/HSI1000
 
 ###
 
-POST http://localhost:4001/login
+GET http://localhost:4001/login/test@gmail.com/1234
 Content-Type: application/json
-
-{
-    "username": "xmleew@gmail.com",
-    "password": "123456"
-}
 
 ###
 
@@ -28,7 +23,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:4000/signup
+POST http://localhost:4001/signup
 Content-Type: application/json
 
 {
