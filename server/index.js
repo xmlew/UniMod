@@ -61,8 +61,8 @@ let refreshTokens = []
 const ACCESS_TOKEN_SECRET = 'ed8b8ef103069e067c0970af7e1646eeb91700c4da9a6f5476b4a47ab6bd1082c1c39f51d664e165baa15004387c0dc8a6958dc85f09572cde5441bbacb07cb7';
 const REFRESH_TOKEN_SECRET = '7785422c96e77bc96c340389361ac04024e3f9dec829769eceb99049ed711fba950375280c3aa019947a02a528f47aeb92b913cf6dbc7cc595f54f80873dd6fd';
 
-app.post('/token', cors(corsOptions), (req, res) => {
-  const refreshToken = req.body.token
+app.get('/token/:tok', cors(corsOptions), (req, res) => {
+  const refreshToken = req.params.tok;
   if (refreshToken == null) return res.sendStatus(401)
   if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
   jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, user) => {
@@ -72,17 +72,17 @@ app.post('/token', cors(corsOptions), (req, res) => {
   })
 })
 
-app.delete('/logout', cors(corsOptions),(req, res) => {
+app.post('/logout', cors(corsOptions),(req, res) => {
   refreshTokens = refreshTokens.filter(token => token !== req.body.token)
   console.log(refreshTokens);
   res.sendStatus(204)
 })
 
-app.post('/signup', cors(corsOptions), async (req, res) => {
-    const givenName = `${req.body.firstName} ${req.body.lastName}`;
-    const username = req.body.username;
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const course = req.body.course;
+app.get('/signup/:fname/:lname/:user/:pass/:course', cors(corsOptions), async (req, res) => {
+    const givenName = `${req.params.fname} ${req.params.lname}`;
+    const username = req.params.user;
+    const hashedPassword = await bcrypt.hash(req.params.pass, 10);
+    const course = req.params.course;
 
     const verify = await users.findOne({'username': username}).exec();
     //users.updateOne({'username': username}, {'modules': 'CS1010S'}).exec();
@@ -92,11 +92,11 @@ app.post('/signup', cors(corsOptions), async (req, res) => {
       res.sendStatus(200));
 })
 
-app.post('/login', cors(corsOptions), async (req, res) => {
+app.get('/login/:user/:pass', cors(corsOptions), async (req, res) => {
   // Authenticate User
 
-  const username = req.body.username
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+  const username = req.params.user
+  const hashedPassword = await bcrypt.hash(req.params.pass, 10);
   const existingUser = await users.findOne({'username': username}).exec();
   if (!existingUser) {
     return res.sendStatus(401);
