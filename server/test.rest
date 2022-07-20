@@ -43,9 +43,13 @@ GET http://localhost:4001/user/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoi
 Content-Type: application/json
 
 ###
-GET  http://localhost:4001/addMod/HSA1000/xmleew@gmail.com
+GET  http://localhost:4001/addMod/HSI1000/xmleew@gmail.com
 
 ###
 
 GET http://localhost:4001/delMod/HSA1000/xmleew@gmail.com
+Content-Type: application/json
+
+###
+GET http://localhost:4001/courseData/Business-Analytics
 Content-Type: application/json

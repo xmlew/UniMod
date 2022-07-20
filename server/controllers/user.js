@@ -103,11 +103,15 @@ const showModules = async (req, res) => {
   let moduleDescriptions = [];
   for (i = 0; i < arr.length; i++) {
     let help = await dataDisplay(arr[i]);
+    let dict = {};
     if (!help) {
-      let lol = arr[i];
-      moduleDescriptions.push({lol: `No data for the module.`});
+      dict['title'] = `No data for the module.`;
+      dict['total'] = arr[i];
+      moduleDescriptions.push(dict);
     } else {
-      moduleDescriptions.push(help);
+      dict['title'] = help[arr[i]];
+      dict['total'] = arr[i];
+      moduleDescriptions.push(dict);
     }
   };
 

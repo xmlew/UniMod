@@ -86,17 +86,16 @@ const modPopularity= async (req, res) => {
 const getCourseStudentData = async (req, res) => {
     const course = req.params['course'].replaceAll("-", " ");
     const results = await students.find({'Course': course},);
-    let sem1 = {}
-    let sem2 = {}
+    let data = {};
     for (i = 0; i < Object.keys(results).length; i++) {
         for (module1 of results[i]["Sem1"].toString().replaceAll("[", "")
                                                      .replaceAll("]", "")
                                                      .replaceAll("'", "")
                                                      .split(", ")) {
-            if (!(module1 in sem1)) {
-                sem1[module1] = 1;
+            if (!(module1 in data)) {
+                data[module1] = 1;
             } else {
-                sem1[module1] += 1;
+                data[module1] += 1;
             }
         }
         
@@ -104,14 +103,21 @@ const getCourseStudentData = async (req, res) => {
                                                       .replaceAll("]", "")
                                                       .replaceAll("'", "")
                                                       .split(", ")) {
-            if (!(module2 in sem2)) {
-                sem2[module2] = 1;
+            if (!(module2 in data)) {
+                data[module2] = 1;
             } else {
-                sem2[module2] += 1;
+                data[module2] += 1;
             }
         }
     }
-    return res.send({message: `Sem1: ${sem1.toString()}, Sem2: ${sem2.toString()}`})
+
+    let newData = [];
+    for (const [key, value] of Object.entries(data)) {
+        let newDict = {title: value, total: key};
+        newData.push(newDict)
+    }
+
+    return res.send(JSON.stringify(newData))
 }
 
 const geModPopularity = async (req, res) => {
