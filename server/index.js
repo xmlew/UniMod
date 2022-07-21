@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
 const {moduleSubs, dataDisplay, getCourseStudentData, modPopularity, geModPopularity} = require("./controllers/modules");
-const {addModule, removeModule, showModules} = require("./controllers/user");
+const {addModule, removeModule, showModules, coursePage} = require("./controllers/user");
 const users = require('./models/users');
 const tokens = require('./models/tokens');
 
@@ -51,8 +51,9 @@ app.get('/courseData/:course', cors(corsOptions),getCourseStudentData);
 app.get('/modtakers/:code', cors(corsOptions), modPopularity);
 app.get('/geMods', cors(corsOptions), geModPopularity);
 app.get('/user/:token', cors(corsOptions), showModules);
-app.get('/addMod/:code/:user', cors(corsOptions), addModule);
-app.get('/delMod/:code/:user', cors(corsOptions), removeModule)
+app.get('/addMod/:code/:token', cors(corsOptions), addModule);
+app.get('/delMod/:code/:token', cors(corsOptions), removeModule)
+app.get('/coursePage/:token', cors(corsOptions), coursePage)
 
 
 //login

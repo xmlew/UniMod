@@ -8,7 +8,10 @@ const { response } = require('express');
 //function to add module into user's data
 const addModule = async (req, res) => {
     const course = req.params['code'];
-    const user = req.params['user'];
+    const token = req.params['token'];
+    const stu = await tokens.findOne({'access': token}).exec();
+    if (!stu) return res.sendStatus(401);
+    const user = stu['username'];
     const student = await users.findOne({'username': user},).exec();
     if (!student) return res.sendStatus(401);
     const mod = await modules.findOne({'Module Code': course}).exec();
@@ -40,7 +43,10 @@ const addModule = async (req, res) => {
 //function to delete module from user's data
 const removeModule = async (req, res) => {
   const course = req.params['code'];
-  const user = req.params['user'];
+  const token = req.params['token'];
+  const stu = await tokens.findOne({'access': token}).exec();
+  if (!stu) return res.sendStatus(401);
+  const user = stu['username'];
   const student = await users.findOne({'username': user},).exec();
   const mod = await modules.findOne({'Module Code': course}).exec();
   if (!mod) return res.sendStatus(401);
@@ -118,4 +124,41 @@ const showModules = async (req, res) => {
   return res.json(moduleDescriptions);
 }
 
-module.exports = {addModule, removeModule, showModules};
+const coursePage = async () => {
+  const token = req.params['token'];
+  const stu = await tokens.findOne({'access': token}).exec();
+  const user = stu['username'];
+  const student = await users.findOne({'username': user},).exec();
+  if (!student) return res.sendStatus(401);
+  let arr = [];
+  if (student['modules'].length != 0) {
+    arr = student['modules'].split(" ");
+  }
+  console.log(arr)
+  let moduleDescriptions = [];
+  for (i = 0; i < arr.length; i++) {
+    //arr[i] is the module code
+    const moduleData = await modules.findOne({
+      'Module Code': arr[i]
+    }).exec();
+    let faculty = "";
+    let courseName = "";
+    if (!moduleData) {
+      courseName = "Not Found"; 
+      faculty = "Not Found"; 
+    } else {
+      courseName = moduleData['Module Title'];
+      faculty = moduleData['Department'];
+    }
+
+    let dict = {};
+    dict['faculty'] = faculty;
+    dict['name'] = courseName;
+    dict['code'] = arr[i];
+    moduleDescriptions.push(dict);
+  };
+
+  return res.json(moduleDescriptions);
+}
+
+module.exports = {coursePage, addModule, removeModule, showModules};
