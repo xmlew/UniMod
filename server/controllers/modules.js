@@ -1,5 +1,7 @@
 const { modules } = require("../models/modules");
-const { students }= require("../models/studentdata")
+const { students }= require("../models/studentdata");
+const users = require('../models/users');
+const tokens = require('../models/tokens');
 
 const subscriptionLevel = (subscription) => {
     if (subscription == "-") {
@@ -24,19 +26,6 @@ const moduleSubs = async (req, res) => {
         return res.status(400).send("No such module in database.")
     }
     return res.status(200).send(subscriptionLevel(subscription['UG']));
-}
-
-//function to query module 'popularity' levels
-/* Queries the database for occurences of the module for a particular year
-   and returns the number of occurences and a popularity level.
-*/
-const modulePopularity = async (req, res) => {
-    const code = req.body;
-    const query = await modules.find();//code in sem1 or sem2
-    const count = query.length();
-    return res.status(200).send({
-        message: `This module had ${count} students taking it.`
-    })
 }
 
 //function for data display in dashboard
@@ -84,7 +73,12 @@ const modPopularity= async (req, res) => {
 //function for student data
 /* for a particular course, shows the modules that were taken in year 1 sem1 and sem2*/
 const getCourseStudentData = async (req, res) => {
-    const course = req.params['course'].replaceAll("-", " ");
+    const token = req.params['token'];
+    const stu = await tokens.findOne({'access': token}).exec();
+    if (!stu) return res.status(401).send("error")
+    const user = stu['username'];
+    const student = await users.findOne({'username': user},).exec();
+    const course = student['course'];
     const results = await students.find({'Course': course},);
     let data = {};
     for (i = 0; i < Object.keys(results).length; i++) {

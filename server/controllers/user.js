@@ -124,7 +124,7 @@ const showModules = async (req, res) => {
   return res.json(moduleDescriptions);
 }
 
-const coursePage = async () => {
+const coursePage = async (req, res) => {
   const token = req.params['token'];
   const stu = await tokens.findOne({'access': token}).exec();
   const user = stu['username'];
@@ -134,7 +134,6 @@ const coursePage = async () => {
   if (student['modules'].length != 0) {
     arr = student['modules'].split(" ");
   }
-  console.log(arr)
   let moduleDescriptions = [];
   for (i = 0; i < arr.length; i++) {
     //arr[i] is the module code
@@ -152,6 +151,7 @@ const coursePage = async () => {
     }
 
     let dict = {};
+    dict['id'] = i + 1;
     dict['faculty'] = faculty;
     dict['name'] = courseName;
     dict['code'] = arr[i];

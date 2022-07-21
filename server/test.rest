@@ -47,9 +47,12 @@ GET  http://localhost:4001/addMod/HSI1000/xmleew@gmail.com
 
 ###
 
-GET http://localhost:4001/delMod/HSA1000/xmleew@gmail.com
+GET http://localhost:4001/delMod/HSA1000/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoieG1sZWV3QGdtYWlsLmNvbSIsImlhdCI6MTY1ODE2Mzc0NCwiZXhwIjoxNjU4MTY3MzQ0fQ.IY-ok1q-wg-DuTO5RBs_7z9THfAWTXB6BvO0ns3gV7U
 Content-Type: application/json
 
 ###
-GET http://localhost:4001/courseData/Business-Analytics
+GET http://localhost:4000/coursePage/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoieG1sZWV3QGdtYWlsLmNvbSIsImlhdCI6MTY1ODE2Mzc0NCwiZXhwIjoxNjU4MTY3MzQ0fQ.IY-ok1q-wg-DuTO5RBs_7z9THfAWTXB6BvO0ns3gV7U
 Content-Type: application/json
+
+###
+GET http://localhost:4001/courseData/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NTgzMDY4NDksImV4cCI6MTY1ODMxMDQ0OX0.rnOglEQMzaYC30GJsodSpc5Zge3n9hcQyJUQ6lxNxwo

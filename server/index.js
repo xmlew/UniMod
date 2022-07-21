@@ -19,7 +19,7 @@ const corsOptions ={
   optionSuccessStatus:200,
 }
 app.use(cors(corsOptions));
-const PORT = 4001;
+const PORT = 4000;
 
 mongoose.Promise = global.Promise;
 const connectToDB = async () => {
@@ -47,7 +47,7 @@ app.get('/', function (req, res) {
 //application searches
 app.get('/modsearch/:code', cors(corsOptions), moduleSubs);
 app.get('/display/:code', cors(corsOptions), dataDisplay);
-app.get('/courseData/:course', cors(corsOptions),getCourseStudentData);
+app.get('/courseData/:token', cors(corsOptions),getCourseStudentData);
 app.get('/modtakers/:code', cors(corsOptions), modPopularity);
 app.get('/geMods', cors(corsOptions), geModPopularity);
 app.get('/user/:token', cors(corsOptions), showModules);
