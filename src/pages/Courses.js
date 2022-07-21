@@ -1,11 +1,16 @@
 import { filter } from 'lodash';
-import { useState } from 'react';
+import * as Yup from 'yup';
+import { useFormik, Form, FormikProvider } from 'formik';
+import { LoadingButton } from '@mui/lab';
+import { sentenceCase } from 'change-case';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
   Card,
   Table,
   Stack,
+  TextField,
   Button,
   Checkbox,
   TableRow,
@@ -15,15 +20,18 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  IconButton,
+  InputAdornment,
+  MenuItem,
 } from '@mui/material';
 // components
 import Page from '../components/Page';
+import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { CourseListHead, CourseListToolbar, CourseMoreMenu } from '../sections/@dashboard/course';
-// Data array for COURSELIST
-import COURSELIST from '../_mock/course';
+
 
 // ----------------------------------------------------------------------
 
@@ -67,6 +75,42 @@ function applySortFilter(array, comparator, query) {
 
 //  Set intial usestate
 export default function Course() {
+
+  
+  const CourseSchema = Yup.object().shape({
+    course: Yup.string()
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      course: '',
+    },
+    validationSchema: CourseSchema,
+    onSubmit: (values) => {
+      const token = localStorage.getItem('AccessToken');
+      const course = values.course;
+      let url = "https://unimod.herokuapp.com/addMod/";
+      url += `${course}/${token}`;
+      alert(url)
+      fetch(url)
+        .then(res => res.text())
+        .then(window.location.reload());
+    },
+  });
+
+  const deleteModule = (values) => {
+    const token = localStorage.getItem('AccessToken');
+    const course = values.course;
+    let url = "https://unimod.herokuapp.com/delMod/";
+    url += `${course}/${token}`;
+    alert(url)
+    fetch(url)
+      .then(res => res.text())
+      .then(window.location.reload());
+  }
+
+  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -78,6 +122,20 @@ export default function Course() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [COURSELIST, setCOURSELIST] = useState([{id: 1, name: 'Loading...', code: 'Loading...', faculty: 'Loading...'}]);
+
+  const url = `https://unimod.herokuapp.com/`;
+
+  useEffect(() => {
+    let data = `https://unimod.herokuapp.com/coursePage/`;
+    data += localStorage.getItem('AccessToken');
+    fetch(data)
+    .then(res => res.json())
+    .then(data => {
+      setCOURSELIST(data);
+    });
+  }, url)
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -138,15 +196,33 @@ export default function Course() {
             Course
           </Typography>
         </Stack>
-        
-        <Stack direction="row-reverse" alignItems="center" mb={2}>
-        <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+        <FormikProvider value={formik}>
+          <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+            <Stack direction="row" alignItems="center" mb={2}>
+              <TextField
+                fullWidth
+                label="Input Course..."
+                {...getFieldProps('course')}
+                error={Boolean(touched.course && errors.course)}
+                helperText={touched.course && errors.course}
+              />
+              <Button variant="contained" type = "submit" startIcon={<Iconify icon="eva:plus-fill" />}>
+                New Course
+              </Button>
+              <Button variant="contained"type = "submit" startIcon={<Iconify icon="eva:minus-fill" />}>
+                Delete Course
+              </Button>
+            </Stack>
+          </Form>
+        </FormikProvider>
+        {/* <Stack direction="row-reverse" alignItems="center" mb={2}>
+        <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
           New Course
         </Button>
-        <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:minus-fill" />}>
+        <Button variant="contained" component={RouterLink} to="/dashboard/courses" startIcon={<Iconify icon="eva:minus-fill" />}>
           Delete Course
         </Button>
-        </Stack>
+        </Stack> */}
 
         <Card>
           <CourseListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
