@@ -20,6 +20,7 @@ export default function LoginForm() {
     password: Yup.string().required('Password is required'),
   });
 
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -27,8 +28,20 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: (values) => {
+      let data = `http://localhost:4001/login/`;
+      data += `${values.email}/${values.password}`;
+      console.log(data);
+      fetch(data, {
+            method: "GET",
+      })
+      .then(res => res.text())
+      .then(data => { 
+        localStorage.setItem("AccessToken",JSON.parse(data).accessToken);
+        localStorage.setItem("RefreshToken",JSON.parse(data).refreshToken)
+      })
+      // .catch(alert("Failed"))
+      .then(navigate('/dashboard/app', { replace: true }));
     },
   });
 
