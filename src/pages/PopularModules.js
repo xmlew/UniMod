@@ -48,7 +48,7 @@ export default function PopularModules() {
   const url = `https://unimod.herokuapp.com/`;
 
   useEffect(() => {
-    let data = `http://localhost:4001/courseData/`;
+    let data = `https://unimod.herokuapp.com/courseData/`;
     data += 'Business-Analytics'
     fetch(data)
     .then(res => res.json())

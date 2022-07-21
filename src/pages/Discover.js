@@ -29,7 +29,7 @@ export default function Discover() {
   const url = `https://unimod.herokuapp.com/`;
 
   useEffect(() => {
-    fetch(`http://localhost:4001/geMods`)
+    fetch(`https://unimod.herokuapp.com/geMods`)
     .then(res => res.json())
     .then(data => {
       setItems(data)

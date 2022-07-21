@@ -1,3 +1,8 @@
+import * as Yup from 'yup';
+
+import { useFormik, Form, FormikProvider } from 'formik';
+import { LoadingButton } from '@mui/lab';
+
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
@@ -7,7 +12,7 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
+  TextField,
   Button,
   Checkbox,
   TableRow,
@@ -17,6 +22,9 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  IconButton,
+  InputAdornment,
+  MenuItem,
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -36,6 +44,7 @@ const TABLE_HEAD = [
   { id: 'faculty', label: 'Faculty', alignRight: false },
   { id: '' },
 ];
+
 
 // ----------------------------------------------------------------------
 
@@ -70,6 +79,27 @@ function applySortFilter(array, comparator, query) {
 
 //  Set intial usestate
 export default function Course() {
+  
+  const CourseSchema = Yup.object().shape({
+    course: Yup.string()
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      course: '',
+    },
+    validationSchema: CourseSchema,
+    onSubmit: (values) => {
+      console.log(values.course)
+      const data = {
+        course: values.course,
+      }
+      
+    },
+  });
+
+  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -141,15 +171,25 @@ export default function Course() {
             Course
           </Typography>
         </Stack>
-        
-        <Stack direction="row-reverse" alignItems="center" mb={2}>
-        <Button variant="contained" component={RouterLink} to="/dashboard/courses" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New Course
-        </Button>
-        <Button variant="contained" component={RouterLink} to="/dashboard/courses" startIcon={<Iconify icon="eva:minus-fill" />}>
-          Delete Course
-        </Button>
-        </Stack>
+        <FormikProvider value={formik}>
+          <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+            <Stack direction="row" alignItems="center" mb={2}>
+              <TextField
+                fullWidth
+                label="Input Course..."
+                {...getFieldProps('course')}
+                error={Boolean(touched.course && errors.course)}
+                helperText={touched.course && errors.course}
+              />
+              <Button type = "submit" variant="contained" component={RouterLink} to="/dashboard/courses" startIcon={<Iconify icon="eva:plus-fill" />}>
+                New Course
+              </Button>
+              <Button type = "submit" variant="contained" component={RouterLink} to="/dashboard/courses" startIcon={<Iconify icon="eva:minus-fill" />}>
+                Delete Course
+              </Button>
+            </Stack>
+          </Form>
+        </FormikProvider>
 
         <Card>
           <CourseListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
