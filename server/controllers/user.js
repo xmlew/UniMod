@@ -98,6 +98,7 @@ const dataDisplay = async (code) => {
 const showModules = async (req, res) => {
   const token = req.params['token'];
   const stu = await tokens.findOne({'access': token}).exec();
+  if (!stu) return res.sendStatus(401);
   const user = stu['username'];
   const student = await users.findOne({'username': user},).exec();
   if (!student) return res.sendStatus(401);
