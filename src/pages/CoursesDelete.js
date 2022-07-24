@@ -189,7 +189,7 @@ export default function Course() {
             <Stack direction="row" alignItems="center" mb={2}>
               <TextField
                 fullWidth
-                label="Input Course..."
+                label="Input Course Code..."
                 {...getFieldProps('course')}
                 error={Boolean(touched.course && errors.course)}
                 helperText={touched.course && errors.course}
