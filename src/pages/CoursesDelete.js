@@ -86,27 +86,16 @@ export default function Course() {
       course: '',
     },
     validationSchema: CourseSchema,
-    onSubmit: (values) => {
+    onSubmit:(values) => {
       const token = localStorage.getItem('AccessToken');
       const course = values.course;
-      let url = "https://unimod.herokuapp.com/addMod/";
+      let url = "https://unimod.herokuapp.com/delMod/";
       url += `${course}/${token}`;
       fetch(url)
         .then(res => res.text())
         .then(window.location.reload());
-    },
+    }
   });
-
-  const deleteModule = (values) => {
-    const token = localStorage.getItem('AccessToken');
-    const course = values.course;
-    let url = "https://unimod.herokuapp.com/delMod/";
-    url += `${course}/${token}`;
-    alert(url)
-    fetch(url)
-      .then(res => res.text())
-      .then(window.location.reload());
-  }
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
   
@@ -205,8 +194,8 @@ export default function Course() {
                 error={Boolean(touched.course && errors.course)}
                 helperText={touched.course && errors.course}
               />
-              <Button variant="contained" type = "submit" startIcon={<Iconify icon="eva:plus-fill" />}>
-                New Course
+              <Button variant="contained" type = "submit" startIcon={<Iconify icon="eva:minus-fill" />}>
+                Delete Course
               </Button>
             </Stack>
           </Form>
