@@ -118,7 +118,6 @@ const geModPopularity = async (req, res) => {
     const results = await students.find();
     const data = {}
     for (i = 0; i < 5000; i++) {
-        console.log(results[i])
         for (mod of results[i]['Sem1'].toString().replaceAll("[", "")
                                                 .replaceAll("]", "")
                                                 .replaceAll("'", "")
