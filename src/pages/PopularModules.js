@@ -11,24 +11,6 @@ import {
 // ----------------------------------------------------------------------
 
 //  Array of Data
-const studentModules = [
-  {
-    title: "Over Subscribed",
-    total: "CS1010S"
-  },
-  {
-    title: "Equal Supply & Demand",
-    total: "CS1010E"
-  },
-  {
-    title: "Under Subscribed",
-    total: "CS1010"
-  },
-  {
-    title: "Over Subscribed",
-    total: "CS1101S"
-  }
-]
 
 function Child(items) {
   if (items === []) {
