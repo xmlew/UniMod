@@ -11,7 +11,7 @@ NodeJS: Local Javascript runtime environment
 
 Express.js: Used extensively as middleware and for web app development
 
-Heroku: Server to host Host APIs
+Heroku: Server to host RESTful APIs
 
 ### Frontend:
 
