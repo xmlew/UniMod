@@ -209,7 +209,7 @@ export default function Course() {
               <Button variant="contained" type = "submit" startIcon={<Iconify icon="eva:plus-fill" />}>
                 New Course
               </Button>
-              <Button variant="contained"type = "submit" startIcon={<Iconify icon="eva:minus-fill" />}>
+              <Button variant="contained" onClick={() => {deleteModule(); handleSubmit()}} startIcon={<Iconify icon="eva:minus-fill" />}>
                 Delete Course
               </Button>
             </Stack>

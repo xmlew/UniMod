@@ -29,7 +29,7 @@ export default function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: (values) => {
-      let data = `http://localhost:4001/login/`;
+      let data = `https://unimod.herokuapp.com/login/`;
       data += `${values.email}/${values.password}`;
       console.log(data);
       fetch(data, {
