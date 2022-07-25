@@ -20,7 +20,7 @@ function Child(items) {
   }
   return items.map((module, i) => (
     <Grid key={i} item xs={12} sm={6} md={3}>
-      <AppWidgetSummary title={module.title} total={module.total} icon={'ant-design:android-filled'} />
+      <AppWidgetSummary title={module.title} total={module.total} subtitle='Users Enrolled Last Year' icon={'ant-design:android-filled'} />
     </Grid>
   ))
 }
