@@ -1,7 +1,7 @@
 // @mui
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
-import { Card, Typography } from '@mui/material';
+import { Card, CardActionArea, Typography } from '@mui/material';
 // utils
 // components
 import Iconify from '../../../components/Iconify';
@@ -43,25 +43,30 @@ export default function AppWidgetSummary({ title, total, subtitle, icon, color =
       }}
       {...other}
     >
-      <IconWrapperStyle
-        sx={{
-          color: (theme) => theme.palette[color].dark,
-          backgroundImage: (theme) =>
-            `linear-gradient(135deg, ${alpha(theme.palette[color].dark, 0)} 0%, ${alpha(
-              theme.palette[color].dark,
-              0.24
-            )} 100%)`,
-        }}
-      >
-        <Iconify icon={icon} width={24} height={24} />
-      </IconWrapperStyle>
 
-      <Typography variant="h3">{total}</Typography>
 
-      <Typography variant="subtitle1" sx={{ opacity: 0.72 }}>
-        {title}
-      </Typography>
-      <Typography variant="subtitle2">{subtitle}</Typography>
-    </Card>
+      <CardActionArea href={`https://nusmods.com/modules/${total.split(' ')[0]}`} target="_blank" rel="noopener noreferrer">
+        <IconWrapperStyle
+          sx={{
+            color: (theme) => theme.palette[color].dark,
+            backgroundImage: (theme) =>
+              `linear-gradient(135deg, ${alpha(theme.palette[color].dark, 0)} 0%, ${alpha(
+                theme.palette[color].dark,
+                0.24
+              )} 100%)`,
+          }}
+        >
+          <Iconify icon={icon} width={24} height={24} />
+        </IconWrapperStyle>
+
+        <Typography variant="h3">{total.split(' ')[0]}</Typography>
+
+        <Typography variant="subtitle1" sx={{ opacity: 0.72 }}>
+          {title}
+        </Typography>
+
+        <Typography variant="subtitle2">{subtitle}</Typography>
+      </CardActionArea>
+      </Card>
   );
 }
