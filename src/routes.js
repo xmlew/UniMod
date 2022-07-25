@@ -10,6 +10,7 @@ import NotFound from './pages/Page404';
 import Register from './pages/Register';
 import Discover from './pages/Discover';
 import DashboardApp from './pages/DashboardApp';
+import CoursesDelete from './pages/CoursesDelete'
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +23,7 @@ export default function Router() {
         { path: '/dashboard', element: <Navigate to="/dashboard/app" /> },
         { path: 'app', element: <DashboardApp /> },
         { path: 'courses', element: <Courses /> },
+        { path: 'coursesdelete', element: <CoursesDelete /> },
         { path: 'discover', element: <Discover /> },
         { path: 'popularmodules', element: <PopularModules /> },
       ],
@@ -30,7 +32,7 @@ export default function Router() {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
-        { path: '/', element: <Navigate to="/dashboard/app" /> },
+        { path: '/', element: <Navigate to="/Register" /> },
         { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
