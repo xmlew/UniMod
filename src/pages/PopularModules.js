@@ -11,24 +11,6 @@ import {
 // ----------------------------------------------------------------------
 
 //  Array of Data
-const studentModules = [
-  {
-    title: "Over Subscribed",
-    total: "CS1010S"
-  },
-  {
-    title: "Equal Supply & Demand",
-    total: "CS1010E"
-  },
-  {
-    title: "Under Subscribed",
-    total: "CS1010"
-  },
-  {
-    title: "Over Subscribed",
-    total: "CS1101S"
-  }
-]
 
 function Child(items) {
   if (items === []) {
@@ -48,7 +30,7 @@ export default function PopularModules() {
   const url = `https://unimod.herokuapp.com/`;
 
   useEffect(() => {
-    let data = `http://localhost:4001/courseData/`;
+    let data = `https://unimod.herokuapp.com/courseData/`;
     data += localStorage.getItem('AccessToken');
     fetch(data)
     .then(res => res.json())

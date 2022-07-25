@@ -12,12 +12,17 @@ const navConfig = [
     icon: getIcon('eva:home-fill'),
   },
   {
-    title: 'courses',
+    title: 'add courses',
     path: '/dashboard/courses',
-    icon: getIcon('eva:layers-fill'),
+    icon: getIcon('eva:plus-fill'),
   },
   {
-    title: 'discover',
+    title: 'delete courses',
+    path: '/dashboard/coursesdelete',
+    icon: getIcon('eva:minus-fill'),
+  },
+  {
+    title: 'discover GE mods',
     path: '/dashboard/discover',
     icon: getIcon('eva:search-fill'),
   },
