@@ -37,6 +37,7 @@ export default function DashboardApp() {
     .then(data => {
       setItems(data);
     });
+    // eslint-disable-next-line
   }, url)
 
   return (
