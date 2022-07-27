@@ -1,0 +1,1 @@
+console.log(fetch('http://localhost:4000/'))

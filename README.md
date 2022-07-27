@@ -11,6 +11,8 @@ NodeJS: Local Javascript runtime environment
 
 Express.js: Used extensively as middleware and for web app development
 
+Heroku: Server to host RESTful APIs
+
 ### Frontend:
 
 Milestone 1 only:
@@ -18,3 +20,6 @@ HTML & CSS: Default building blocks of web development
 
 Milestone 2 onwards:
 React.js: Popular frontend framework with much community support.
+
+Milestone 3 onwards:
+CI/CD with Github Actions
