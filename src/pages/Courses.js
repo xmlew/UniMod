@@ -1,10 +1,7 @@
 import { filter } from 'lodash';
 import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
-import { LoadingButton } from '@mui/lab';
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
   Card,
@@ -20,13 +17,9 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  IconButton,
-  InputAdornment,
-  MenuItem,
 } from '@mui/material';
 // components
 import Page from '../components/Page';
-import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
@@ -88,7 +81,7 @@ export default function Course() {
     validationSchema: CourseSchema,
     onSubmit: (values) => {
       const token = localStorage.getItem('AccessToken');
-      const course = values.course;
+      const {course} = values;
       let url = "https://unimod.herokuapp.com/addMod/";
       url += `${course}/${token}`;
       fetch(url)
@@ -97,18 +90,7 @@ export default function Course() {
     },
   });
 
-  const deleteModule = (values) => {
-    const token = localStorage.getItem('AccessToken');
-    const course = values.course;
-    let url = "https://unimod.herokuapp.com/delMod/";
-    url += `${course}/${token}`;
-    alert(url)
-    fetch(url)
-      .then(res => res.text())
-      .then(window.location.reload());
-  }
-
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
   
   const [page, setPage] = useState(0);
 
@@ -134,6 +116,7 @@ export default function Course() {
     .then(data => {
       setCOURSELIST(data);
     });
+    // eslint-disable-next-line
   }, url)
 
   const handleRequestSort = (event, property) => {
