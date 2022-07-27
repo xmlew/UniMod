@@ -1,0 +1,40 @@
+GET http://localhost:4000
+
+###
+
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "username": "bob",
+    "password": "123456"
+}
+
+###
+
+POST http://localhost:4000/token/
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYm9iIiwiaWF0IjoxNjU4MDM1NTAwfQ.57q5HqRn6N7cHvS5kfr1MtuGt7Ls_QArMIQREtdVXLI" 
+}
+
+###
+DELETE  http://localhost:4000/logout
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQm9iIiwiaWF0IjoxNjU3OTczNDA3fQ.sG1j_fcBVT8WLwiR1yIxmC-16leII0lvkd7sCYogq78"
+}
+
+###
+POST http://localhost:4000/signup
+Content-Type: application/json
+
+{
+    "firstName": "Hello",
+    "lastName": "World",
+    "username": "bob",
+    "password": "123456",
+    "course": "Information Systems"
+}

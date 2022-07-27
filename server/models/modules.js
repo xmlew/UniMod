@@ -1,20 +1,21 @@
 const mongoose = require('mongoose');
-const schema = mongoose.Schema;
 
 const moduleSubscriptionSchema = new mongoose.Schema({
-    _id: String,
-    faculty: String,
-    moduleCode: String,
-    moduleTitle: String,
-    moduleClass: String,
-    UG: String,
-    GD: String,
-    DK: String,
-    NG: String,
-    CPE: String},
-    { collection: 'Module Subscription Data'}
+    'Faculty/School': { type:  String },
+    'Department': { type: String },
+    'Module Code': { type:  String },
+    'Module Title': { type:  String },
+    'Module Class': { type:  String },
+    'UG': { type:  String },
+    'GD': { type:  String },
+    'DK': { type:  String },
+    'NG': { type:  String },
+    'CPE': { type:  String }
+    }, {
+        collection: 'Module Subscription Data'
+    }
 )
 
-const modules = mongoose.model('Modules', moduleSubscriptionSchema);
+const modules = mongoose.model('Module Subcription Data', moduleSubscriptionSchema);
 
-module.exports = modules;
+module.exports = { modules };

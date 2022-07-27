@@ -1,0 +1,58 @@
+GET https://unimod2.herokuapp.com/modsearch/HSI1000
+
+###
+
+GET http://localhost:4001/login/test@gmail.com/1234
+Content-Type: application/json
+
+###
+
+POST http://localhost:4001/token/
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYm9iIiwiaWF0IjoxNjU4MDM1NTAwfQ.57q5HqRn6N7cHvS5kfr1MtuGt7Ls_QArMIQREtdVXLI" 
+}
+
+###
+DELETE  http://localhost:4000/logout
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQm9iIiwiaWF0IjoxNjU3OTczNDA3fQ.sG1j_fcBVT8WLwiR1yIxmC-16leII0lvkd7sCYogq78"
+}
+
+###
+POST http://localhost:4001/signup
+Content-Type: application/json
+
+{
+    "firstName": "Hello",
+    "lastName": "World",
+    "username": "bob",
+    "password": "123456",
+    "course": "Information Systems"
+}
+
+###
+GET http://localhost:4001/geMods
+
+###
+
+GET http://localhost:4001/user/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoieG1sZWV3QGdtYWlsLmNvbSIsImlhdCI6MTY1ODE2Mzc0NCwiZXhwIjoxNjU4MTY3MzQ0fQ.IY-ok1q-wg-DuTO5RBs_7z9THfAWTXB6BvO0ns3gV7U
+Content-Type: application/json
+
+###
+GET  http://localhost:4001/addMod/HSI1000/xmleew@gmail.com
+
+###
+
+GET http://localhost:4001/delMod/HSA1000/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoieG1sZWV3QGdtYWlsLmNvbSIsImlhdCI6MTY1ODE2Mzc0NCwiZXhwIjoxNjU4MTY3MzQ0fQ.IY-ok1q-wg-DuTO5RBs_7z9THfAWTXB6BvO0ns3gV7U
+Content-Type: application/json
+
+###
+GET http://localhost:4000/coursePage/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoieG1sZWV3QGdtYWlsLmNvbSIsImlhdCI6MTY1ODE2Mzc0NCwiZXhwIjoxNjU4MTY3MzQ0fQ.IY-ok1q-wg-DuTO5RBs_7z9THfAWTXB6BvO0ns3gV7U
+Content-Type: application/json
+
+###
+GET http://localhost:4001/courseData/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NTgzMDY4NDksImV4cCI6MTY1ODMxMDQ0OX0.rnOglEQMzaYC30GJsodSpc5Zge3n9hcQyJUQ6lxNxwo
