@@ -1,5 +1,7 @@
 const { modules } = require("../models/modules");
-const { students }= require("../models/studentdata")
+const { students }= require("../models/studentdata");
+const users = require('../models/users');
+const tokens = require('../models/tokens');
 
 const subscriptionLevel = (subscription) => {
     if (subscription == "-") {
@@ -24,19 +26,6 @@ const moduleSubs = async (req, res) => {
         return res.status(400).send("No such module in database.")
     }
     return res.status(200).send(subscriptionLevel(subscription['UG']));
-}
-
-//function to query module 'popularity' levels
-/* Queries the database for occurences of the module for a particular year
-   and returns the number of occurences and a popularity level.
-*/
-const modulePopularity = async (req, res) => {
-    const code = req.body;
-    const query = await modules.find();//code in sem1 or sem2
-    const count = query.length();
-    return res.status(200).send({
-        message: `This module had ${count} students taking it.`
-    })
 }
 
 //function for data display in dashboard
@@ -84,20 +73,23 @@ const modPopularity= async (req, res) => {
 //function for student data
 /* for a particular course, shows the modules that were taken in year 1 sem1 and sem2*/
 const getCourseStudentData = async (req, res) => {
-    const course = req.params['course'].replaceAll("-", " ");
+    const token = req.params['token'];
+    const stu = await tokens.findOne({'access': token}).exec();
+    if (!stu) return res.status(401).send("error")
+    const user = stu['username'];
+    const student = await users.findOne({'username': user},).exec();
+    const course = student['course'];
     const results = await students.find({'Course': course},);
-    let sem1 = {}
-    let sem2 = {}
-    console.log(Object.keys(results[0]["Sem1"]));
+    let data = {};
     for (i = 0; i < Object.keys(results).length; i++) {
         for (module1 of results[i]["Sem1"].toString().replaceAll("[", "")
                                                      .replaceAll("]", "")
                                                      .replaceAll("'", "")
                                                      .split(", ")) {
-            if (!(module1 in sem1)) {
-                sem1[module1] = 1;
+            if (!(module1 in data)) {
+                data[module1] = 1;
             } else {
-                sem1[module1] += 1;
+                data[module1] += 1;
             }
         }
         
@@ -105,16 +97,57 @@ const getCourseStudentData = async (req, res) => {
                                                       .replaceAll("]", "")
                                                       .replaceAll("'", "")
                                                       .split(", ")) {
-            if (!(module2 in sem2)) {
-                sem2[module2] = 1;
+            if (!(module2 in data)) {
+                data[module2] = 1;
             } else {
-                sem2[module2] += 1;
+                data[module2] += 1;
             }
         }
     }
-    console.log(sem1)
-    console.log(sem2)
-    return res.send({message: `Sem1: ${sem1.toString()}, Sem2: ${sem2.toString()}`})
+
+    let newData = [];
+    for (const [key, value] of Object.entries(data)) {
+        let newDict = {title: value, total: key};
+        newData.push(newDict)
+    }
+
+    return res.send(JSON.stringify(newData))
 }
 
-module.exports = {subscriptionLevel, moduleSubs, dataDisplay, getCourseStudentData, modPopularity};
+const geModPopularity = async (req, res) => {
+    const results = await students.find();
+    const data = {}
+    for (i = 0; i < 5000; i++) {
+        for (mod of results[i]['Sem1'].toString().replaceAll("[", "")
+                                                .replaceAll("]", "")
+                                                .replaceAll("'", "")
+                                                .split(", ")) {
+            if (!(mod in data) && mod.startsWith("GE")) {
+                data[mod] = 1;
+            } else if (mod.startsWith("GE")) {
+                data[mod] += 1;
+            }
+        }
+
+        for (mod of results[i]['Sem2'].toString().replaceAll("[", "")
+                                                .replaceAll("]", "")
+                                                .replaceAll("'", "")
+                                                .split(", ")) {
+            if (!(mod in data) && mod.startsWith("GE")) {
+                data[mod] = 1;
+            } else if ((mod.startsWith("GE"))) {
+                data[mod] += 1;
+            }
+        }
+    }
+    let newData = [];
+    for (const [key, value] of Object.entries(data)) {
+        let newDict = {title: value, total: key};
+        newData.push(newDict)
+    }
+    // for every item in results, if there is a GE module not in the current dictionary, add it into the dict.
+    // if there is, add a count to it.
+    return res.send(JSON.stringify(newData))
+}
+
+module.exports = {subscriptionLevel, moduleSubs, dataDisplay, getCourseStudentData, modPopularity, geModPopularity};
