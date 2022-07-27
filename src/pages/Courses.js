@@ -116,6 +116,7 @@ export default function Course() {
     .then(data => {
       setCOURSELIST(data);
     });
+    // eslint-disable-next-line
   }, url)
 
   const handleRequestSort = (event, property) => {

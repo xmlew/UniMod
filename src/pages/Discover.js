@@ -34,6 +34,7 @@ export default function Discover() {
     .then(data => {
       setItems(data)
     });
+    // eslint-disable-next-line
   }, url)
 
   return (
